@@ -1,85 +1,77 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+    <h1>My Rugby League</h1>
+        <nav class="navbar">
+            <ul>
+                <li><RouterLink to="/">Inicio</RouterLink></li>
+                <li><RouterLink to="/tareas">Proyectos</RouterLink></li>
+                <li><RouterLink to="/tareas">Tareas</RouterLink></li>
+            </ul>
+        </nav>
   </header>
 
   <RouterView />
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
+.main-header {
+    width: 100%;
+    height: 125px;
+    background: linear-gradient(60deg, rgb(14, 7, 7) 0%, rgb(71 1 1) 100%);
+    border-bottom: 2px solid rgb(71 1 1);
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+    flex-direction: column;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0;
+    z-index: 30;
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        color: white;
+        margin-bottom: 20px;
+    }
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.navbar {
+    width: 100%;
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+    ul {
+        list-style-type: none;
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        text-align: center;
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+        li {
+            flex-grow: 1;
+
+            a {
+                display: block;
+                color: white;
+                text-decoration: none;
+                text-shadow: 2px 1px black;
+                line-height: 2.5em;
+                font-size: 1.3em;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgb(71 1 1);
+                }
+            }
+
+        }
+    }
 }
 </style>
