@@ -1,5 +1,6 @@
 <script setup>
-
+import UsersTable from '../components/UsersTable.vue'
+import UserForm from '../components/UserForm.vue'
 </script>
 
 <template>
