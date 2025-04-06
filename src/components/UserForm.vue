@@ -7,6 +7,8 @@
   const password = ref('')
   const role = ref('')
 
+  const emit = defineEmits(['create-user', 'update-user'])
+
   function submitUser(e) {
     e.preventDefault()
     if (!name.value || !email.value || !password.value || !role.value) {
@@ -19,10 +21,10 @@
       password: password.value,
       role: role.value
     }
-    if(id.value) {
-      console.log('editando', id.value, 'user', user)
+    if (id.value) {
+      emit('update-user', { user, _id: id.value } )
     } else {
-      console.log('creando', 'user', user)
+      emit('create-user', user)
     }
   }
 
