@@ -1,9 +1,10 @@
 <script setup>
-  const tempUsers = [
-    {_id: 1, name: 'Pepe', email: 'pepe@pe.pe', role: 'admin'},
-    {_id: 2, name: 'Paco', email: 'paco@pa.pa', role: 'user'},
-    {_id: 3, name: 'Luis', email: 'luis@lu.lu', role: 'user'},
-  ]
+  import { defineProps, watch } from 'vue'
+  const props = defineProps(['users'])
+
+  watch(props, () => {
+    console.log('users en hijo', props.users)
+  })
 </script>
 
 <template>
@@ -16,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="user in tempUsers" :key="user._id">
+      <tr v-for="user in props.users" :key="user._id">
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.role }}</td>
