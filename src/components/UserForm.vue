@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
 
   const id = ref('')
   const name = ref('')
@@ -7,7 +7,25 @@
   const password = ref('')
   const role = ref('')
 
-  const emit = defineEmits(['create-user', 'update-user'])
+  const emit = defineEmits(['create-user', 'update-user', 'clear-user'])
+
+  const props = defineProps(['selectedUser'])
+
+  watch(props, () => {
+    if (props.selectedUser) {
+      id.value = props.selectedUser._id
+      name.value = props.selectedUser.name
+      email.value = props.selectedUser.email
+      password.value = props.selectedUser.password
+      role.value = props.selectedUser.role
+    } else {
+      id.value = ''
+      name.value = ''
+      email.value = ''
+      password.value = ''
+      role.value = ''
+    }
+  })
 
   function submitUser(e) {
     e.preventDefault()
@@ -18,12 +36,12 @@
     const user = {
       name: name.value,
       email: email.value,
-      password: password.value,
       role: role.value
     }
     if (id.value) {
       emit('update-user', { user, _id: id.value } )
     } else {
+      user.password = password.value
       emit('create-user', user)
     }
   }
@@ -41,7 +59,7 @@
       <label for="email">Email</label>
       <input type="email" id="email" name="email" v-model="email" required />
     </div>
-    <div class="form-group">
+    <div v-if="!id" class="form-group">
       <label for="password">Password</label>
       <input type="password" id="password" name="password" v-model="password" required />
     </div>
@@ -53,5 +71,6 @@
       </select>
     </div>
     <button type="submit" @click="submitUser">Submit</button>
+    <button type="button" @click="$emit('clear-user')">Clear</button>
   </form>
 </template>

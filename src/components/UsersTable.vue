@@ -14,6 +14,7 @@
         <th>Name</th>
         <th>Email</th>
         <th>Role</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -21,6 +22,10 @@
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.role }}</td>
+        <th>
+          <button class="table-btn" @click="$emit('edit-user', user)">✎</button>
+          <button class="table-btn" @click="$emit('remove-user', user._id)">🗑</button>
+        </th>
       </tr>
     </tbody>
   </table>
