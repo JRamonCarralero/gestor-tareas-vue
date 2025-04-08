@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
+  <header class="main-header">
     <h1>Project Tool</h1>
         <nav class="navbar">
             <ul>
@@ -14,15 +14,12 @@ import { RouterLink, RouterView } from 'vue-router'
         </nav>
   </header>
 
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 .main-header {
     width: 100%;
@@ -73,5 +70,10 @@ import { RouterLink, RouterView } from 'vue-router'
 
         }
     }
+}
+
+main {
+  width: 100%;
+  margin-top: 130px;
 }
 </style>
