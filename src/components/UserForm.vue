@@ -5,7 +5,7 @@
   const name = ref('')
   const email = ref('')
   const password = ref('')
-  const role = ref('')
+  const role = ref('user')
 
   const emit = defineEmits(['create-user', 'update-user', 'clear-user'])
 
@@ -19,14 +19,31 @@
       password.value = props.selectedUser.password
       role.value = props.selectedUser.role
     } else {
-      id.value = ''
-      name.value = ''
-      email.value = ''
-      password.value = ''
-      role.value = ''
+      clearForm()
     }
   })
 
+  /**
+   * Resets the form fields to empty values.
+   * Useful for clearing the form when the user is no longer selected.
+   */
+  function clearForm() {
+    id.value = ''
+    name.value = ''
+    email.value = ''
+    password.value = ''
+    role.value = 'user'
+  }
+
+/**
+ * Handles the form submission event for creating or updating a user.
+ * Prevents the default form submission behavior and validates if all
+ * required fields are filled. If the form is valid, emits either a
+ * 'create-user' or 'update-user' event depending on whether the user
+ * has an ID.
+ *
+ * @param {Event} e - The form submission event
+ */
   function submitUser(e) {
     e.preventDefault()
     if (!name.value || !email.value || !password.value || !role.value) {
@@ -45,6 +62,10 @@
       emit('create-user', user)
     }
   }
+
+  defineExpose({
+    clearForm
+  })
 
 </script>
 

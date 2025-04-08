@@ -4,7 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <h1>My Rugby League</h1>
+    <h1>Project Tool</h1>
         <nav class="navbar">
             <ul>
                 <li><RouterLink to="/">Inicio</RouterLink></li>

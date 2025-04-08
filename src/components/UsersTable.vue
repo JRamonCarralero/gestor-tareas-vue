@@ -1,10 +1,7 @@
 <script setup>
-  import { defineProps, watch } from 'vue'
+  import { defineProps } from 'vue'
   const props = defineProps(['users'])
 
-  watch(props, () => {
-    console.log('users en hijo', props.users)
-  })
 </script>
 
 <template>
@@ -24,7 +21,7 @@
         <td>{{ user.role }}</td>
         <th>
           <button class="table-btn" @click="$emit('edit-user', user)">✎</button>
-          <button class="table-btn" @click="$emit('remove-user', user._id)">🗑</button>
+          <button class="table-btn" @click="$emit('remove-user', { _id: user._id, name: user.name })">🗑</button>
         </th>
       </tr>
     </tbody>
