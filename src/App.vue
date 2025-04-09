@@ -24,8 +24,8 @@ import { RouterLink, RouterView } from 'vue-router'
 .main-header {
     width: 100%;
     height: 125px;
-    background: linear-gradient(60deg, rgb(14, 7, 7) 0%, rgb(71 1 1) 100%);
-    border-bottom: 2px solid rgb(71 1 1);
+    background: #000777;
+    border-bottom: 2px solid #000444;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -64,7 +64,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
                 &:hover {
                     cursor: pointer;
-                    background-color: rgb(71 1 1);
+                    background-color: #0011ff;
                 }
             }
 
