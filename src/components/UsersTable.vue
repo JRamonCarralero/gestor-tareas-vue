@@ -21,7 +21,7 @@
         <td>{{ user.role }}</td>
         <th class="table-btn-th th-100">
           <button class="table-btn" @click="$emit('edit-user', user)">✎</button>
-          <button class="table-btn" @click="$emit('remove-user', { _id: user._id, name: user.name })">🗑</button>
+          <button class="table-btn" @click="$emit('remove-user', { uid: user.firebaseUid, name: user.name })">🗑</button>
         </th>
       </tr>
     </tbody>

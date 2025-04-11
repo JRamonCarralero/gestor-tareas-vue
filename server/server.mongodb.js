@@ -10,8 +10,9 @@ export const db = {
     delete: deleteItem,
     update: updateItem,
     findById: findById,
+    getFilter: getFilter,
     loginUser: loginUser,
-    getFilter: getFilter
+    deleteUserByUID: deleteUserByUID
 }
 
 /**
@@ -61,6 +62,22 @@ async function getItems(filter, collection) {
     const returnValue = await itemsCollection.deleteOne({ _id: new ObjectId(id) });
     console.log('db deleteItem', returnValue, id)
     return id
+  }
+
+/**
+ * Deletes a user from the 'users' collection in the 'proyecttool' database
+ * that matches the given Firebase UID.
+ *
+ * @param {string} uid - The Firebase UID of the user to be deleted.
+ * @returns {Promise<string>} The Firebase UID of the deleted user.
+ */
+  async function deleteUserByUID(uid) {
+    const client = new MongoClient(URI);
+    const comercioDB = client.db(database);
+    const itemsCollection = comercioDB.collection('users');
+    const returnValue = await itemsCollection.deleteOne({ firebaseUid: uid });
+    console.log('db deleteUserByUID', returnValue, uid)
+    return uid
   }
 
 /**
