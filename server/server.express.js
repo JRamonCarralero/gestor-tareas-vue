@@ -5,6 +5,7 @@ import { db } from "./server.mongodb.js";
 import { ObjectId } from "mongodb";
 import process from "node:process";
 import admin from './firebase.admin.js';
+import authRoutes from './routes/auth.js'; //importamos la ruta para verificar el token
 
 const app = express();
 const port = process.env.PORT;
@@ -18,6 +19,10 @@ app.use(bodyParser.json())
 // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// AUTH //
+app.use('/api/auth', authRoutes);
+
+//const JWT_SECRET = 'qwerty_147258369';
 
 // USERS //
 
@@ -92,6 +97,29 @@ app.delete('/delete/users/uid/:uid', async (req, res) => {
 
 app.get('/findbyid/users/:id', async (req, res) => {
   res.json(await db.findById({ _id: new ObjectId(req.params.id) }, 'users'))
+})
+
+// LOGIN //
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Se requieren email y contraseña.' });
+  }
+  try {
+    const userRecord = await admin.auth().signInWithEmailAndPassword(email, password);
+    const firebaseUid = userRecord.user.uid
+
+    const user = await db.findByFirebaseUid(firebaseUid);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    let errorMessage = 'Error al iniciar sesión.';
+    if (error.code === 'auth/wrong-password') {
+      errorMessage = 'La contraseña es incorrecta.';
+    }
+    res.status(401).json({ message: errorMessage, firebaseErrorCode: error.code });
+  }
 })
 
 

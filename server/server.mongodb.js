@@ -10,6 +10,7 @@ export const db = {
     delete: deleteItem,
     update: updateItem,
     findById: findById,
+    findOne: findOne,
     getFilter: getFilter,
     loginUser: loginUser,
     deleteUserByUID: deleteUserByUID
@@ -109,6 +110,14 @@ async function getItems(filter, collection) {
     const client = new MongoClient(URI);
     const rugbyleagueDB = client.db(database);
     const itemsCollection = rugbyleagueDB.collection(collection);
+    const response = await itemsCollection.findOne(filter)
+    return response;
+  }
+
+  async function findOne(filter, collection) {
+    const client = new MongoClient(URI);
+    const comercioDB = client.db(database);
+    const itemsCollection = comercioDB.collection(collection);
     const response = await itemsCollection.findOne(filter)
     return response;
   }

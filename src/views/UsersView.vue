@@ -3,6 +3,10 @@ import UsersTable from '../components/UsersTable.vue'
 import UserForm from '../components/UserForm.vue'
 import { getAPIData } from '@/utils/utils'
 import { onMounted, ref, useTemplateRef } from 'vue'
+import { useAuthStore } from '@/stores/auth.js';
+
+const authStore = useAuthStore();
+console.log(authStore.user);
 
 const API_PORT = location.port ? `:3333` : ''
 
