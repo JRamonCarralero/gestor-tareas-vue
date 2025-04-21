@@ -2,6 +2,7 @@
 
 import { HttpError } from '@/classes/HttpError.js'
 import { simpleFetch } from '@/utils/simpleFetch.js'
+import { getAuth } from 'firebase/auth'
 
 
 /**
@@ -49,10 +50,14 @@ export async function getAPIData(apiURL, method = 'GET', data) {
       if (data) {
         headers.append('Content-Length', String(JSON.stringify(data).length))
       }
-      const userData = '123456'
-      if (userData) {
-        headers.append('Authorization', `Bearer ${userData}`)
+
+      const user = getAuth().currentUser
+      if (user) {
+        user.getIdToken().then(token => {
+          headers.append('Authorization', `Bearer ${token}`)
+        })
       }
+
       apiData = await simpleFetch(apiURL, {
         // Si la petición tarda demasiado, la abortamos
         signal: AbortSignal.timeout(3000),

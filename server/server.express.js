@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb";
 import process from "node:process";
 import admin from './firebase.admin.js';
 import authRoutes from './routes/auth.js'; //importamos la ruta para verificar el token
+import { authorize } from './middleware/authorize.js';
 
 const app = express();
 const port = process.env.PORT;
@@ -70,7 +71,7 @@ app.delete('/delete/users/:id', async (req, res) => {
   res.json(await db.delete(req.params.id, 'users'))
 })
 
-app.delete('/delete/users/uid/:uid', async (req, res) => {
+app.delete('/delete/users/uid/:uid', authorize('admin'),  async (req, res) => {
   const uidToDelete = req.params.uid;
 
   if (!uidToDelete) {
