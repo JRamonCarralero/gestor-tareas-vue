@@ -84,7 +84,8 @@ app.delete('/delete/users/uid/:uid', authorize('admin'),  async (req, res) => {
     console.log(`Usuario con UID ${uidToDelete} eliminado de Firebase.`);
 
     // Eliminamos al usuario de MongoDB
-    res.json(await db.deleteUserByUID(uidToDelete));
+    const response = await db.deleteUserByUID(uidToDelete)
+    res.json({ message: 'OK', data: response });
 
   } catch (error) {
     console.error(`Error al eliminar el usuario con UID ${uidToDelete} de Firebase:`, error);

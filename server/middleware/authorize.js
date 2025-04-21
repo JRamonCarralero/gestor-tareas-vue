@@ -9,6 +9,7 @@ const authorize = (requiredRole) => {
             return res.status(401).json({ message: 'Token no proporcionado.' });
         }
 
+        // Hago un split de la cabecera para obtener el token, quje es el segundo elemento
         const idToken = authorizationHeader.split('Bearer ')[1];
 
         try {

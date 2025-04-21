@@ -1,5 +1,26 @@
 <script setup>
+import { ref, watch } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
+import { useAuthStore } from './stores/auth';
+import { signOut } from '../hidden/firebaseConfig.js';
+
+const authStore = useAuthStore();
+const user = ref(null);
+
+/**
+ * Logs the user out of Firebase Auth and Pinia auth store.
+ * Also removes the isAuthenticated flag from session storage.
+ */
+function logout() {
+  authStore.clearUser();
+  sessionStorage.removeItem('isAuthenticated');
+  signOut();
+}
+
+watch(() => authStore.user, () => {
+  user.value = authStore.user
+})
+
 </script>
 
 <template>
@@ -7,9 +28,11 @@ import { RouterLink, RouterView } from 'vue-router'
     <h1>Project Tool</h1>
         <nav class="navbar">
             <ul>
-                <li><RouterLink to="/">Inicio</RouterLink></li>
-                <li><RouterLink to="/users">Usuarios</RouterLink></li>
-                <li><RouterLink to="/tareas">Tareas</RouterLink></li>
+                <li v-if="!user"><RouterLink to="/">Login</RouterLink></li>
+                <li v-if="user"><RouterLink to="/users">Usuarios</RouterLink></li>
+                <li v-if="user"><RouterLink to="/tareas">Tareas</RouterLink></li>
+                <li v-if="user"><RouterLink to="/proyectos">Proyectos</RouterLink></li>
+                <li v-if="user"><button id="logout-btn" class="logout-btn" @click="logout">Logout</button></li>
             </ul>
         </nav>
   </header>

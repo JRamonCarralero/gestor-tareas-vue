@@ -83,9 +83,13 @@ function editUser(user) {
  */
 async function removeUser(data) {
   if (window.confirm(`¿Desea borrar el usuario ${data.name}?`)) {
-    await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/delete/users/uid/${data.uid}`, 'DELETE');
-    clearUser()
-    users.value = await getUsers()
+    const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/delete/users/uid/${data.uid}`, 'DELETE');
+    if (response.message === 'OK') {
+      clearUser()
+      users.value = await getUsers()
+    } else {
+      alert(response.message)
+    }
   }
 }
 
