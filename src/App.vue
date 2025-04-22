@@ -75,6 +75,7 @@ watch(() => authStore.user, () => {
         display: flex;
         justify-content: space-evenly;
         text-align: center;
+        align-items: center;
 
         li {
             flex-grow: 1;
@@ -93,6 +94,20 @@ watch(() => authStore.user, () => {
                 }
             }
 
+            .logout-btn {
+                width: 100%;
+                background: none;
+                border: none;
+                color: white;
+                text-shadow: 2px 1px black;
+                line-height: 2.5em;
+                font-size: 1.3em;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: #0011ff;
+                }
+            }
         }
     }
 }
