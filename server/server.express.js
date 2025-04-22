@@ -26,7 +26,7 @@ app.use('/api/auth', authRoutes);
 
 // USERS //
 
-app.post('/create/users', async (req, res) => {
+app.post('/create/users', authorize('admin'), async (req, res) => {
   const { name, email, password, role } = req.body
   if (!email || !password) {
     return res.status(400).json({ message: 'Se requieren email y contraseña.' });
@@ -46,7 +46,8 @@ app.post('/create/users', async (req, res) => {
       name: name,
       role: role
     };
-    res.status(201).json(await db.create(userData, 'users'));
+    const response = await db.create(userData, 'users')
+    res.status(201).json({ message: 'OK', data: response });
 
   } catch (error) {
     console.error('Error al crear el usuario en Firebase:', error);
@@ -62,8 +63,9 @@ app.get('/read/users', async (req, res) => {
   res.json(await db.get({}, 'users'))
 })
 
-app.put('/update/users/:id', async (req, res) => {
-  res.json(await db.update(req.params.id, req.body, 'users'))
+app.put('/update/users/:id', authorize('admin'), async (req, res) => {
+  const response = await db.update(req.params.id, req.body, 'users')
+  res.status(200).json({ message: 'OK', data: response });
 })
 
 app.delete('/delete/users/:id', async (req, res) => {
@@ -84,7 +86,7 @@ app.delete('/delete/users/uid/:uid', authorize('admin'),  async (req, res) => {
 
     // Eliminamos al usuario de MongoDB
     const response = await db.deleteUserByUID(uidToDelete)
-    res.json({ message: 'OK', data: response });
+    res.status(200).json({ message: 'OK', data: response });
 
   } catch (error) {
     console.error(`Error al eliminar el usuario con UID ${uidToDelete} de Firebase:`, error);

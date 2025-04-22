@@ -35,7 +35,12 @@ async function getUsers() {
  * @returns {Promise<void>}
  */
 async function createUser(user) {
-  const newUser = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/users`, 'POST', JSON.stringify(user));
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/users`, 'POST', JSON.stringify(user));
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
+  const newUser = response.data
   users.value.push(newUser)
   clearUser()
 }
@@ -52,7 +57,11 @@ async function createUser(user) {
  * @returns {Promise<void>}
  */
 async function updateUser(data) {
-  await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/update/users/${data._id}`, 'PUT', JSON.stringify(data.user));
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/update/users/${data._id}`, 'PUT', JSON.stringify(data.user));
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
   clearUser()
   users.value = await getUsers()
 }

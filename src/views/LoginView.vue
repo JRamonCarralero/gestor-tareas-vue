@@ -33,7 +33,7 @@ const login = async () => {
       const userData = await response.json();
       authStore.setUser(userData); // Guarda la información del usuario en Pinia
       sessionStorage.setItem('isAuthenticated', 'true'); // Guarda un indicador de sesión
-      router.push('/users'); // Redirige a la página principal
+      router.push('/projects'); // Redirige a la página principal
     } else if (response.status === 401) {
       error.value = 'Credenciales inválidas.';
     } else {

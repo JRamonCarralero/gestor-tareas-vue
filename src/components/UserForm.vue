@@ -46,10 +46,18 @@
  */
   function submitUser(e) {
     e.preventDefault()
-    if (!name.value || !email.value || !password.value || !role.value) {
-      alert('Por favor, rellene todos los campos')
-      return
+    if (!id.value){
+      if (!name.value || !email.value || !password.value || !role.value) {
+        alert('Por favor, rellene todos los campos')
+        return
+      }
+    } else {
+      if (!name.value || !email.value || !role.value) {
+        alert('Por favor, rellene todos los campos')
+        return
+      }
     }
+
     const user = {
       name: name.value,
       email: email.value,

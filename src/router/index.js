@@ -27,7 +27,7 @@ const router = createRouter({
       path: '/users',
       name: 'users',
       component: () => import('../views/UsersView.vue'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true, isAdmin: true }
     },
   ],
 })
@@ -37,6 +37,10 @@ router.beforeEach((to) => {
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     console.log('no autenticado');
     return '/'
+  }
+  if (to.meta.isAdmin && authStore.user.role !== 'admin') {
+    console.log('no admin');
+    return '/projects'
   }
 })
 
