@@ -3,6 +3,7 @@ import { db } from '../server.mongodb.js';
 
 const authorize = (requiredRole) => {
     return async (req, res, next) => {
+        console.log(req.headers)
         const authorizationHeader = req.headers.authorization;
 
         if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {

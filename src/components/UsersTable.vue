@@ -1,5 +1,10 @@
 <script setup>
   import { defineProps } from 'vue'
+  import { useAuthStore } from '@/stores/auth.js';
+
+  const authStore = useAuthStore();
+  const userAuth = authStore.user;
+
   const props = defineProps(['users'])
 
 </script>
@@ -21,7 +26,7 @@
         <td>{{ user.role }}</td>
         <th class="table-btn-th th-100">
           <button class="table-btn" @click="$emit('edit-user', user)">✎</button>
-          <button class="table-btn" @click="$emit('remove-user', { uid: user.firebaseUid, name: user.name })">🗑</button>
+          <button v-if="userAuth.role === 'admin' && userAuth._id !== user._id" class="table-btn" @click="$emit('remove-user', { uid: user.firebaseUid, name: user.name })">🗑</button>
         </th>
       </tr>
     </tbody>

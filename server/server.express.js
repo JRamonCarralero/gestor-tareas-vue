@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 import process from "node:process";
 import admin from './firebase.admin.js';
 import authRoutes from './routes/auth.js'; //importamos la ruta para verificar el token
-import { authorize } from './middleware/authorize.js';
+import authorize from './middleware/authorize.js';
 
 const app = express();
 const port = process.env.PORT;
@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // AUTH //
 app.use('/api/auth', authRoutes);
 
-//const JWT_SECRET = 'qwerty_147258369';
 
 // USERS //
 

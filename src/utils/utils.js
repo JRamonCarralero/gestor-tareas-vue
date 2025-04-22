@@ -53,7 +53,7 @@ export async function getAPIData(apiURL, method = 'GET', data) {
 
       const user = getAuth().currentUser
       if (user) {
-        user.getIdToken().then(token => {
+        await user.getIdToken().then(token => {
           headers.append('Authorization', `Bearer ${token}`)
         })
       }

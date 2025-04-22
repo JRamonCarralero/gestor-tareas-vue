@@ -1,20 +1,22 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from './stores/auth';
-import { signOut } from '../hidden/firebaseConfig.js';
+import { auth, signOut } from '../hidden/firebaseConfig.js';
 
 const authStore = useAuthStore();
 const user = ref(null);
+const router = useRouter();
 
 /**
  * Logs the user out of Firebase Auth and Pinia auth store.
  * Also removes the isAuthenticated flag from session storage.
  */
-function logout() {
+async function logout() {
   authStore.clearUser();
   sessionStorage.removeItem('isAuthenticated');
-  signOut();
+  await signOut(auth);
+  router.push('/');
 }
 
 watch(() => authStore.user, () => {
