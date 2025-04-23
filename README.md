@@ -2,4 +2,6 @@
 
 Gestor de proyectos.
 
-Actualemente trabajando en la autenticación por medio de Firebase y mirando la creación de token JWT
+Creación, actualización y borrado de usuario tanto en Firebase como en MongoDB.
+
+Login y logout creado, con flag de isAuthenticated en el sessionStorage y gestión del usuario logueado en Pinia.
