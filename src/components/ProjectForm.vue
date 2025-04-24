@@ -12,7 +12,8 @@ const description = ref('')
 
 const emit = defineEmits(['create-project', 'update-project'])
 
-function submitProject() {
+function submitProject(e) {
+  e.preventDefault()
   const project = {
     name: name.value,
     client: client.value,
