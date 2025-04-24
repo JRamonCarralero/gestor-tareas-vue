@@ -111,58 +111,15 @@ function clearUser() {
 </script>
 
 <template>
-  <div class="users-title-container">
-    <h2 class="users-title">Usuarios</h2>
+  <div class="view-title-container">
+    <h2 class="view-title">Usuarios</h2>
   </div>
-  <div class="users-container">
-    <div id="user-form-container" class="user-form-container">
+  <div class="view-container">
+    <div id="user-form-container" class="view-form-container">
       <UserForm ref="usersForm" :selected-user="selectedUser" @create-user="(user) => createUser(user)" @update-user="(data) => updateUser(data)" @clear-user="clearUser" />
     </div>
-    <div id="users-table-container" class="users-table-container">
+    <div id="users-table-container" class="view-table-container">
       <UsersTable :users="users" @edit-user="(user) => editUser(user)" @remove-user="(id) => removeUser(id)" />
     </div>
   </div>
 </template>
-
-<style scoped>
-.users-title-container {
-  width: 100%;
-  height: 80px;
-  border-bottom: 2px solid #000444;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.users-title {
-  text-align: center;
-  margin-bottom: 20px;
-  margin-top: 30px;
-  font-size: 34px;
-  font-weight: bold;
-  color: rgb(48, 48, 48);
-}
-
-.users-container {
-  width: 90%;
-  min-width: 650px;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.user-form-container {
-  width: 100%;
-  padding: 15px;
-  border-bottom: 2px solid #000444;
-}
-
-.users-table-container {
-  width: 100%;
-  padding: 15px;
-  margin-top: 15px;
-}
-</style>

@@ -27,6 +27,12 @@ async function updateProject(data) {
 </script>
 
 <template>
-  <h2>Proyectos</h2>
-  <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" />
+  <div class="view-title-container">
+    <h2 class="view-title">Proyectos</h2>
+  </div>
+  <div class="view-container">
+    <div id="project-form-container" class="view-form-container">
+      <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" />
+    </div>
+  </div>
 </template>

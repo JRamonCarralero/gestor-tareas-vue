@@ -78,9 +78,9 @@
 </script>
 
 <template>
-  <form class="user-form">
+  <form class="form-main">
     <input type="hidden" name="id" id="id" v-model="id" />
-    <fieldset class="user-form-fieldset">
+    <fieldset class="form-fieldset">
       <legend>Datos del usuario</legend>
       <div class="form-group">
         <label for="name">Name:</label>
@@ -102,51 +102,9 @@
         </select>
       </div>
       <div class="form-buttons">
-        <button type="submit" @click="submitUser">Submit</button>
-        <button type="button" @click="$emit('clear-user')">Clear</button>
+        <button type="submit" class="submit-btn" @click="submitUser">Submit</button>
+        <button type="button" class="clear-btn" @click="$emit('clear-user')">Clear</button>
       </div>
     </fieldset>
   </form>
 </template>
-
-<style scoped>
-.user-form {
-  width: 100%;
-  padding: 20px;
-}
-
-.user-form-fieldset {
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  padding: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  width: 300px;
-}
-
-.form-buttons {
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-
-  button {
-    width: 200px;
-    padding: 5px;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-}
-</style>
