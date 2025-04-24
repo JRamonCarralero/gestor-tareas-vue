@@ -10,6 +10,45 @@ const status = ref('')
 const priority = ref('')
 const description = ref('')
 
+const emit = defineEmits(['create-project', 'update-project'])
+
+function submitProject() {
+  const project = {
+    name: name.value,
+    client: client.value,
+    initialDate: initialDate.value,
+    finalDate: finalDate.value,
+    status: status.value,
+    priority: priority.value,
+    description: description.value
+  }
+  if (id.value) {
+    const data = {
+      _id: id.value,
+      project
+    }
+    console.log('update', data)
+    emit('update-project', data)
+  } else {
+    console.log('create', project)
+    emit('create-project', project)
+  }
+}
+
+function clearForm() {
+  id.value = ''
+  name.value = ''
+  client.value = ''
+  initialDate.value = ''
+  finalDate.value = ''
+  status.value = ''
+  priority.value = ''
+  description.value = ''
+}
+
+defineExpose({
+  clearForm
+})
 </script>
 
 <template>
@@ -54,5 +93,9 @@ const description = ref('')
       <label for="description">Descripción:</label>
       <textarea id="description" name="description" v-model="description"></textarea>
     </div>
+    <div class="form-buttons">
+        <button type="submit" @click="submitProject">Submit</button>
+        <button type="button" @click="clearForm">Clear</button>
+      </div>
   </fieldset>
 </template>

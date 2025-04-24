@@ -64,8 +64,13 @@ app.get('/read/users', async (req, res) => {
 })
 
 app.put('/update/users/:id', authorize('admin'), async (req, res) => {
-  const response = await db.update(req.params.id, req.body, 'users')
-  res.status(200).json({ message: 'OK', data: response });
+  try {
+    const response = await db.update(req.params.id, req.body, 'users')
+    res.status(200).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
+    res.status(500).json({ message: 'Error al actualizar el usuario.' });
+  }
 })
 
 app.delete('/delete/users/:id', async (req, res) => {
@@ -102,26 +107,39 @@ app.get('/findbyid/users/:id', async (req, res) => {
   res.json(await db.findById({ _id: new ObjectId(req.params.id) }, 'users'))
 })
 
-// LOGIN //
+// Projects //
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Se requieren email y contraseña.' });
-  }
+app.post('/create/projects',authorize('admin'), async (req, res) => {
   try {
-    const userRecord = await admin.auth().signInWithEmailAndPassword(email, password);
-    const firebaseUid = userRecord.user.uid
-
-    const user = await db.findByFirebaseUid(firebaseUid);
-    res.status(200).json(user);
+    const response = await db.create(req.body, 'projects')
+    res.status(201).json({ message: 'OK', data: response });
   } catch (error) {
-    console.error('Error al iniciar sesión:', error);
-    let errorMessage = 'Error al iniciar sesión.';
-    if (error.code === 'auth/wrong-password') {
-      errorMessage = 'La contraseña es incorrecta.';
-    }
-    res.status(401).json({ message: errorMessage, firebaseErrorCode: error.code });
+    console.error('Error al crear el proyecto:', error);
+    res.status(500).json({ message: 'Error al crear el proyecto.' });
+  }
+})
+
+app.get('/read/projects', async (req, res) => {
+  res.json(await db.get({}, 'projects'))
+})
+
+app.put('/update/projects/:id',authorize('admin'), async (req, res) => {
+  try {
+    const response = await db.update(req.params.id, req.body, 'projects')
+    res.status(200).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al actualizar el proyecto:', error);
+    res.status(500).json({ message: 'Error al actualizar el proyecto.' });
+  }
+})
+
+app.delete('/delete/projects/:id',authorize('admin'), async (req, res) => {
+  try {
+    const response = await db.delete(req.params.id, 'projects')
+    res.status(200).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al eliminar el proyecto:', error);
+    res.status(500).json({ message: 'Error al eliminar el proyecto.' });
   }
 })
 
