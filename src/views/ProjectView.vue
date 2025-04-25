@@ -1,11 +1,24 @@
 <script setup>
 import ProjectForm from '@/components/ProjectForm.vue';
+import ProjectList from '@/components/ProjectList.vue';
 import { getAPIData } from '@/utils/utils';
-import { useTemplateRef } from 'vue';
+import { useTemplateRef, ref, onMounted } from 'vue';
 
 const API_PORT = location.port ? `:3333` : ''
 
 const projectForm = useTemplateRef('projectForm')
+
+const projects = ref([])
+
+onMounted(async () => {
+  projects.value = await getProjects()
+})
+
+async function getProjects() {
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects`);
+  return response
+
+}
 
 async function createProject(project) {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/projects`, 'POST', JSON.stringify(project));
@@ -13,7 +26,7 @@ async function createProject(project) {
     alert(response.message)
     return
   }
-  projectForm.value.clearProject()
+  projectForm.value.clearForm()
 }
 
 async function updateProject(data) {
@@ -22,7 +35,7 @@ async function updateProject(data) {
     alert(response.message)
     return
   }
-  projectForm.value.clearProject()
+  projectForm.value.clearForm()
 }
 </script>
 
@@ -34,5 +47,6 @@ async function updateProject(data) {
     <div id="project-form-container" class="view-form-container">
       <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" />
     </div>
+    <ProjectList :projects="projects" />
   </div>
 </template>

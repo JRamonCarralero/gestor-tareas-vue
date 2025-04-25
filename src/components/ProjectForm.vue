@@ -6,8 +6,8 @@ const name = ref('')
 const client = ref('')
 const initialDate = ref('')
 const finalDate = ref('')
-const status = ref('')
-const priority = ref('')
+const status = ref('pending')
+const priority = ref('low')
 const description = ref('')
 
 const emit = defineEmits(['create-project', 'update-project'])
@@ -67,11 +67,11 @@ defineExpose({
       </div>
       <div class="form-group">
         <label for="initialDate">Fecha de inicio:</label>
-        <input type="date" id="initialDate" name="initialDate" v-model="initialDate" required />
+        <input type="date" id="initialDate" name="initialDate" v-model="initialDate" />
       </div>
       <div class="form-group">
         <label for="finalDate">Fecha de finalización:</label>
-        <input type="date" id="finalDate" name="finalDate" v-model="finalDate" required />
+        <input type="date" id="finalDate" name="finalDate" v-model="finalDate" />
       </div>
       <div class="form-group">
         <label for="status">Status:</label>
