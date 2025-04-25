@@ -23,3 +23,37 @@
     </li>
   </ul>
 </template>
+
+<style scoped>
+  .projects-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .project-element {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  .project-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  .project-data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    margin-bottom: 5px;
+  }
+  </style>

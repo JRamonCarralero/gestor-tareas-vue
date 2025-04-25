@@ -47,6 +47,8 @@ async function updateProject(data) {
     <div id="project-form-container" class="view-form-container">
       <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" />
     </div>
-    <ProjectList :projects="projects" />
+    <div id="projects-list-container" class="view-table-container">
+      <ProjectList :projects="projects" />
+    </div>
   </div>
 </template>
