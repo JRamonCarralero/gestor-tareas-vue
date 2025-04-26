@@ -10,6 +10,8 @@ const status = ref('pending')
 const priority = ref('low')
 const description = ref('')
 
+const showForm = ref(false)
+
 const emit = defineEmits(['create-project', 'update-project'])
 
 function submitProject(e) {
@@ -47,13 +49,21 @@ function clearForm() {
   description.value = ''
 }
 
+function showHideForm() {
+  showForm.value = !showForm.value
+  clearForm()
+}
+
 defineExpose({
   clearForm
 })
 </script>
 
 <template>
-  <form class="form-main">
+  <div class="btn-container">
+    <button @click="showHideForm" :class="['btn-form', showForm ? 'btn-hide' : 'btn-show']"> {{ showForm ? 'Ocultar' : 'Crear' }} proyecto</button>
+  </div>
+  <form :class="{ 'form-hidden': !showForm }" class="form-main">
     <input type="hidden" name="id" id="id" v-model="id" />
     <fieldset class="form-fieldset">
       <legend>Datos del proyecto</legend>
@@ -101,3 +111,37 @@ defineExpose({
     </fieldset>
   </form>
 </template>
+
+<style scoped>
+  .form-hidden {
+    display: none;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 1rem;
+  }
+
+  .btn-form {
+    width: 200px;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 10px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .btn-show {
+    background-color: #4CAF50;
+  }
+
+  .btn-hide {
+    background-color: #ff0000;
+  }
+</style>
