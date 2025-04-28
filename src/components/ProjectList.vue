@@ -8,13 +8,13 @@
   <ul class="projects-list">
     <li class="project-element" v-for="project in props.projects" :key="project._id">
       <div class="project-info">
-        <h3 class="project-name">{{ project.name }}</h3>
+        <h3 class="project-name" @click="$emit('select-project', project)">{{ project.name }}</h3>
         <div class="project-data">
-          <span>Client: {{ project.client }}</span>
-          <span>Initial Date: {{ project.initialDate }}</span>
-          <span>Final Date: {{ project.finalDate }}</span>
-          <span>Status: {{ project.status }}</span>
-          <span>Priority: {{ project.priority }}</span>
+          <span>Cliente: {{ project.client }}</span>
+          <span>Fecha de Inicio: {{ project.initialDate }}</span>
+          <span>Fecha Final: {{ project.finalDate }}</span>
+          <span>Estado: {{ project.status }}</span>
+          <span>Prioridad: {{ project.priority }}</span>
         </div>
         <div class="project-description">
           <p>{{ project.description }}</p>
@@ -45,6 +45,10 @@
     font-weight: bold;
     margin-bottom: 5px;
     text-align: center;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .project-data {

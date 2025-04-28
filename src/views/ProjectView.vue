@@ -17,7 +17,6 @@ onMounted(async () => {
 async function getProjects() {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects`);
   return response
-
 }
 
 async function createProject(project) {
@@ -27,6 +26,7 @@ async function createProject(project) {
     return
   }
   projectForm.value.clearForm()
+  projects.value = await getProjects()
 }
 
 async function updateProject(data) {
@@ -36,6 +36,21 @@ async function updateProject(data) {
     return
   }
   projectForm.value.clearForm()
+  projects.value = await getProjects()
+}
+
+function selectProject(project) {
+  projectForm.value.selectProject(project)
+}
+
+async function deleteProject(data) {
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/delete/projects/${data._id}`, 'DELETE');
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
+  projectForm.value.clearForm()
+  projects.value = await getProjects()
 }
 </script>
 
@@ -45,10 +60,10 @@ async function updateProject(data) {
   </div>
   <div class="view-container">
     <div id="project-form-container" class="view-form-container">
-      <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" />
+      <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" @delete-project="deleteProject" />
     </div>
     <div id="projects-list-container" class="view-table-container">
-      <ProjectList :projects="projects" />
+      <ProjectList :projects="projects" @select-project="(project) => selectProject(project)" />
     </div>
   </div>
 </template>

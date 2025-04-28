@@ -110,7 +110,12 @@
   color: white;
 }
 
-.clear-btn {
+.delete-btn {
   background-color: #f44336;
+  color: white;
+}
+
+.clear-btn {
+  background-color: #008CBA;
   color: white;
 }

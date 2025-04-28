@@ -12,7 +12,7 @@ const description = ref('')
 
 const showForm = ref(false)
 
-const emit = defineEmits(['create-project', 'update-project'])
+const emit = defineEmits(['create-project', 'update-project', 'delete-project'])
 
 function submitProject(e) {
   e.preventDefault()
@@ -30,12 +30,17 @@ function submitProject(e) {
       _id: id.value,
       project
     }
-    console.log('update', data)
     emit('update-project', data)
   } else {
-    console.log('create', project)
     emit('create-project', project)
   }
+}
+
+function deleteProject() {
+  const data = {
+    _id: id.value
+  }
+  emit('delete-project', data)
 }
 
 function clearForm() {
@@ -54,8 +59,23 @@ function showHideForm() {
   clearForm()
 }
 
+function selectProject(project) {
+  id.value = project._id
+  name.value = project.name
+  client.value = project.client
+  initialDate.value = project.initialDate
+  finalDate.value = project.finalDate
+  status.value = project.status
+  priority.value = project.priority
+  description.value = project.description
+
+  showForm.value = true
+}
+
 defineExpose({
-  clearForm
+  clearForm,
+  showHideForm,
+  selectProject
 })
 </script>
 
@@ -105,8 +125,9 @@ defineExpose({
         <textarea id="description" name="description" v-model="description" rows="7"></textarea>
       </div>
       <div class="form-buttons">
-          <button type="submit" class="submit-btn" @click="submitProject">Submit</button>
-          <button type="button" class="clear-btn" @click="clearForm">Clear</button>
+          <button type="submit" class="submit-btn" @click="submitProject">Guardar</button>
+          <button type="button" class="clear-btn" @click="clearForm">Limpiar</button>
+          <button v-if="id" type="button" class="delete-btn" @click="deleteProject">Eliminar</button>
         </div>
     </fieldset>
   </form>
