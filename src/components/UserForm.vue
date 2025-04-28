@@ -83,7 +83,7 @@
     <fieldset class="form-fieldset">
       <legend>Datos del usuario</legend>
       <div class="form-group">
-        <label for="name">Name:</label>
+        <label for="name">Nombre:</label>
         <input type="text" id="name" name="name" v-model="name" required />
       </div>
       <div class="form-group">
@@ -91,19 +91,19 @@
         <input type="email" id="email" name="email" v-model="email" required />
       </div>
       <div v-if="!id" class="form-group">
-        <label for="password">Password:</label>
+        <label for="password">Contraseña:</label>
         <input type="password" id="password" name="password" v-model="password" required />
       </div>
       <div class="form-group">
-        <label for="role">Role:</label>
+        <label for="role">Rol:</label>
         <select id="role" name="role" v-model="role" required>
           <option value="admin">Gestor</option>
           <option value="user">Técnico</option>
         </select>
       </div>
       <div class="form-buttons">
-        <button type="submit" class="submit-btn" @click="submitUser">Submit</button>
-        <button type="button" class="clear-btn" @click="$emit('clear-user')">Clear</button>
+        <button type="submit" class="submit-btn" @click="submitUser">Guardar</button>
+        <button type="button" class="clear-btn" @click="$emit('clear-user')">Limpiar</button>
       </div>
     </fieldset>
   </form>
