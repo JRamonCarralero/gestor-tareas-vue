@@ -6,8 +6,9 @@
   const email = ref('')
   const password = ref('')
   const role = ref('user')
+  let firebaseUid = ''
 
-  const emit = defineEmits(['create-user', 'update-user', 'clear-user'])
+  const emit = defineEmits(['create-user', 'update-user', 'clear-user', 'remove-user'])
 
   const props = defineProps(['selectedUser'])
 
@@ -18,6 +19,7 @@
       email.value = props.selectedUser.email
       password.value = props.selectedUser.password
       role.value = props.selectedUser.role
+      firebaseUid = props.selectedUser.firebaseUid
     } else {
       clearForm()
     }
@@ -33,6 +35,7 @@
     email.value = ''
     password.value = ''
     role.value = 'user'
+    firebaseUid = ''
   }
 
 /**
@@ -71,6 +74,14 @@
     }
   }
 
+/**
+ * Emits a 'remove-user' event with the user's Firebase UID and name.
+ * This event is used to trigger the removal of a user from the system.
+ */
+  function removeUser() {
+    emit('remove-user', { uid: firebaseUid, name: name.value })
+  }
+
   defineExpose({
     clearForm
   })
@@ -104,6 +115,7 @@
       <div class="form-buttons">
         <button type="submit" class="submit-btn" @click="submitUser">Guardar</button>
         <button type="button" class="clear-btn" @click="$emit('clear-user')">Limpiar</button>
+        <button v-if="id" type="button" class="delete-btn" @click="removeUser">Eliminar</button>
       </div>
     </fieldset>
   </form>

@@ -116,10 +116,16 @@ function clearUser() {
   </div>
   <div class="view-container">
     <div id="user-form-container" class="view-form-container">
-      <UserForm ref="usersForm" :selected-user="selectedUser" @create-user="(user) => createUser(user)" @update-user="(data) => updateUser(data)" @clear-user="clearUser" />
+      <UserForm ref="usersForm" :selected-user="selectedUser"
+        @create-user="(user) => createUser(user)"
+        @update-user="(data) => updateUser(data)"
+        @clear-user="clearUser"
+        @remove-user="(data) => removeUser(data)"
+      />
     </div>
     <div id="users-table-container" class="view-table-container">
-      <UsersTable :users="users" @edit-user="(user) => editUser(user)" @remove-user="(id) => removeUser(id)" />
+      <!--<UsersTable :users="users" @edit-user="(user) => editUser(user)" @remove-user="(id) => removeUser(id)" />-->
+      <UsersTable :users="users" @edit-user="(user) => editUser(user)" />
     </div>
   </div>
 </template>

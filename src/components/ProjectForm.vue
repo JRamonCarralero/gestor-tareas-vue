@@ -14,6 +14,13 @@ const showForm = ref(false)
 
 const emit = defineEmits(['create-project', 'update-project', 'delete-project'])
 
+/**
+ * Handles the submission of the project form.
+ * Prevents the default form submission and emits either a 'create-project' or
+ * 'update-project' event based on the presence of an id.
+ *
+ * @param {Event} e - The form submission event.
+ */
 function submitProject(e) {
   e.preventDefault()
   const project = {
@@ -36,6 +43,9 @@ function submitProject(e) {
   }
 }
 
+/**
+ * Emits a 'delete-project' event with the id of the project to delete.
+ */
 function deleteProject() {
   const data = {
     _id: id.value
@@ -43,6 +53,10 @@ function deleteProject() {
   emit('delete-project', data)
 }
 
+/**
+ * Resets the form fields to empty values.
+ * Useful for clearing the form when the user is no longer selected.
+ */
 function clearForm() {
   id.value = ''
   name.value = ''
@@ -54,11 +68,30 @@ function clearForm() {
   description.value = ''
 }
 
+/**
+ * Toggles the visibility of the project form.
+ * When the form is shown, it clears the form fields.
+ * This is useful for switching between form view states.
+ */
 function showHideForm() {
   showForm.value = !showForm.value
   clearForm()
 }
 
+/**
+ * Populates the form fields with the data from the selected project.
+ * Sets the visibility of the form to true.
+ *
+ * @param {Object} project - The project object containing the details to populate the form.
+ * @param {string} project._id - The unique identifier of the project.
+ * @param {string} project.name - The name of the project.
+ * @param {string} project.client - The client associated with the project.
+ * @param {string} project.initialDate - The initial date of the project.
+ * @param {string} project.finalDate - The final date of the project.
+ * @param {string} project.status - The current status of the project.
+ * @param {string} project.priority - The priority level of the project.
+ * @param {string} project.description - The description of the project.
+ */
 function selectProject(project) {
   id.value = project._id
   name.value = project.name
