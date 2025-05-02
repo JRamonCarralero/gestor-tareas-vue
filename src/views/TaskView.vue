@@ -1,13 +1,18 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getAPIData } from '@/utils/utils';
+import { useAuthStore } from '../stores/auth';
 
 const API_PORT = location.port ? `:3333` : ''
+
+const authStore = useAuthStore();
+const user = ref(null);
 
 const projects = ref([]);
 
 onMounted(async () => {
   projects.value = await getProjects();
+  user.value = authStore.user;
 });
 
 async function getProjects() {

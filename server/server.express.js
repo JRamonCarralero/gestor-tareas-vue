@@ -111,7 +111,9 @@ app.get('/findbyid/users/:id', async (req, res) => {
 
 app.post('/create/projects',authorize('admin'), async (req, res) => {
   try {
-    const response = await db.create(req.body, 'projects')
+    const data =  req.body
+    data.createdBy = new ObjectId(data.createdBy)  // Convertimos el ID de string a ObjectId
+    const response = await db.create(data, 'projects')
     res.status(201).json({ message: 'OK', data: response });
   } catch (error) {
     console.error('Error al crear el proyecto:', error);

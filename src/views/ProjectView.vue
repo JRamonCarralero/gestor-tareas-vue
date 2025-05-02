@@ -3,8 +3,12 @@ import ProjectForm from '@/components/ProjectForm.vue';
 import ProjectList from '@/components/ProjectList.vue';
 import { getAPIData } from '@/utils/utils';
 import { useTemplateRef, ref, onMounted } from 'vue';
+import { useAuthStore } from '../stores/auth';
 
 const API_PORT = location.port ? `:3333` : ''
+
+const authStore = useAuthStore();
+const user = ref(null);
 
 const projectForm = useTemplateRef('projectForm')
 
@@ -12,6 +16,7 @@ const projects = ref([])
 
 onMounted(async () => {
   projects.value = await getProjects()
+  user.value = authStore.user;
 })
 
 /**
@@ -20,23 +25,25 @@ onMounted(async () => {
  */
 async function getProjects() {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects`);
+  console.log(response)
   return response
 }
 
 /**
- * Creates a new project in the server.
+ * Creates a new project in the server adding the current user as the creator.
  * If the response is not OK, shows an alert with the response message.
  * If the response is OK, clears the form and updates the projects list.
  * @param {Object} project - The project data to create
  * @returns {Promise<void>}
  */
 async function createProject(project) {
+  project.createdBy = user.value._id
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/projects`, 'POST', JSON.stringify(project));
   if (response.message !== 'OK') {
     alert(response.message)
     return
   }
-  projectForm.value.clearForm()
+  projectForm.value.showHideForm()
   projects.value = await getProjects()
 }
 
@@ -53,7 +60,7 @@ async function updateProject(data) {
     alert(response.message)
     return
   }
-  projectForm.value.clearForm()
+  projectForm.value.showHideForm()
   projects.value = await getProjects()
 }
 
@@ -88,7 +95,7 @@ async function deleteProject(data) {
     alert(response.message)
     return
   }
-  projectForm.value.clearForm()
+  projectForm.value.showHideForm()
   projects.value = await getProjects()
 }
 </script>
