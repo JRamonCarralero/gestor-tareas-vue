@@ -112,7 +112,8 @@ app.get('/findbyid/users/:id', async (req, res) => {
 app.post('/create/projects',authorize('admin'), async (req, res) => {
   try {
     const data =  req.body
-    data.createdBy = new ObjectId(data.createdBy)  // Convertimos el ID de string a ObjectId
+    data.createdBy = new ObjectId(data.createdBy)
+    data.assignedTo = [new ObjectId(data.createdBy)]
     const response = await db.create(data, 'projects')
     res.status(201).json({ message: 'OK', data: response });
   } catch (error) {
