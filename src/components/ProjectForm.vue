@@ -9,6 +9,7 @@ const finalDate = ref('')
 const status = ref('pending')
 const priority = ref('low')
 const description = ref('')
+const assignedTo = ref([])
 
 const showForm = ref(false)
 
@@ -30,7 +31,8 @@ function submitProject(e) {
     finalDate: finalDate.value,
     status: status.value,
     priority: priority.value,
-    description: description.value
+    description: description.value,
+    assignedTo: assignedTo.value
   }
   if (id.value) {
     const data = {
@@ -66,6 +68,7 @@ function clearForm() {
   status.value = ''
   priority.value = ''
   description.value = ''
+  assignedTo.value = []
 }
 
 /**
@@ -101,6 +104,7 @@ function selectProject(project) {
   status.value = project.status
   priority.value = project.priority
   description.value = project.description
+  assignedTo.value = project.assignedTo
 
   showForm.value = true
 }
@@ -156,6 +160,9 @@ defineExpose({
       <div class="form-textarea">
         <label for="description">Descripción:</label>
         <textarea id="description" name="description" v-model="description" rows="7"></textarea>
+      </div>
+      <div class="form-list">
+        <label for="assignedTo">Asignados:</label>
       </div>
       <div class="form-buttons">
           <button type="submit" class="submit-btn" @click="submitProject">Guardar</button>
