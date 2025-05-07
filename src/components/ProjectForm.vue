@@ -1,12 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { getAPIData } from '@/utils/utils';
 import { useAuthStore } from '../stores/auth';
 
 const API_PORT = location.port ? `:3333` : ''
 
 const authStore = useAuthStore();
-const user = ref(null);
+const user = authStore.user;
 
 const id = ref('')
 const name = ref('')
@@ -17,6 +17,7 @@ const status = ref('pending')
 const priority = ref('low')
 const description = ref('')
 const assignedTo = ref([])
+const selectedAssigned = ref('')
 
 const usersAssigned = ref([]);
 const usersNotAssigned = ref([]);
@@ -25,9 +26,9 @@ const showForm = ref(false)
 
 const emit = defineEmits(['create-project', 'update-project', 'delete-project'])
 
-onMounted( () => {
-  user.value = authStore.user;
-})
+// onMounted( () => {
+//   user.value = authStore.user;
+// })
 
 /**
  * Handles the submission of the project form.
@@ -83,6 +84,9 @@ function clearForm() {
   priority.value = ''
   description.value = ''
   assignedTo.value = []
+  selectedAssigned.value = ''
+
+  checkAssigned()
 }
 
 /**
@@ -108,6 +112,7 @@ function showHideForm() {
  * @param {string} project.status - The current status of the project.
  * @param {string} project.priority - The priority level of the project.
  * @param {string} project.description - The description of the project.
+ * @param {string[]} project.assignedTo - The IDs of the users assigned to the project.
  */
 function selectProject(project) {
   id.value = project._id
@@ -125,7 +130,14 @@ function selectProject(project) {
   showForm.value = true
 }
 
+/**
+ * Checks which users are assigned to the project and which are not.
+ * Populates the 'usersAssigned' and 'usersNotAssigned' arrays with the respective users.
+ * If there are no assigned users, assigns the current user to the project.
+ */
 async function checkAssigned() {
+  usersAssigned.value = [];
+  usersNotAssigned.value = [];
   const allUsers = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/users`);
   allUsers.forEach(u => {
     if (assignedTo.value.includes(u._id)) {
@@ -136,9 +148,32 @@ async function checkAssigned() {
   })
   if (assignedTo.value.length === 0) {
     usersAssigned.value.push(user);
-    assignedTo.value.push(user.value._id);
-    usersNotAssigned.value = usersNotAssigned.value.filter(u => u._id !== user.value._id);
+    assignedTo.value.push(user._id);
+    usersNotAssigned.value = usersNotAssigned.value.filter(u => u._id !== user._id);
   }
+}
+
+/**
+ * Assigns a user to the project.
+ * Adds the user to the assigned users list and removes them from the not assigned users list.
+ */
+function assignUser() {
+  assignedTo.value.push(selectedAssigned.value);
+  usersAssigned.value.push(usersNotAssigned.value.find(u => u._id === selectedAssigned.value));
+  usersNotAssigned.value = usersNotAssigned.value.filter(u => u._id !== selectedAssigned.value);
+
+  console.log('selectedAssigned', selectedAssigned.value);
+  console.log('user', user._id);
+}
+
+/**
+ * Removes a user from the assigned users list and adds them to the not assigned users list.
+ * @param {string} userId - The ID of the user to remove.
+ */
+function removeAssigned(userId) {
+  assignedTo.value = assignedTo.value.filter(u => u !== userId);
+  usersNotAssigned.value.push(usersAssigned.value.find(u => u._id === userId));
+  usersAssigned.value = usersAssigned.value.filter(u => u._id !== userId);
 }
 
 defineExpose({
@@ -193,8 +228,23 @@ defineExpose({
         <label for="description">Descripción:</label>
         <textarea id="description" name="description" v-model="description" rows="7"></textarea>
       </div>
-      <div class="form-list">
-        <label for="assignedTo">Asignados:</label>
+      <div class="form-assigned-list">
+        <div class="assigned-header">
+          <h3>Asignados</h3>
+          <div class="assigned-select">
+            <label for="assignedTo">Seleccione usuario:</label>
+            <select id="assignedTo" name="assignedTo" v-model="selectedAssigned">
+              <option v-for="una in usersNotAssigned" :key="una._id" :value="una._id">{{ una.name }}</option>
+            </select>
+            <button type="button" id="btn-assign" class="submit-btn assign-btn" @click="assignUser">Asignar</button>
+          </div>
+        </div>
+        <ul class="assigned-list">
+          <li class="assigned-item" v-for="ua in usersAssigned" :key="ua._id" :value="ua._id">
+            {{ ua.name }}
+            <button v-if="user && ua._id !== user._id" type="button" class="table-btn" @click="removeAssigned(ua._id)">🗑</button>
+          </li>
+        </ul>
       </div>
       <div class="form-buttons">
           <button type="submit" class="submit-btn" @click="submitProject">Guardar</button>
@@ -236,5 +286,60 @@ defineExpose({
 
   .btn-hide {
     background-color: #ff0000;
+  }
+
+  .form-assigned-list {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+  }
+
+  .assigned-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .assigned-select {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .assign-btn {
+    width: 100px;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 2px 8px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .assigned-list {
+    width: 100%;
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    list-style: none;
+  }
+
+  .table-btn {
+    background: #f2f2f2;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 30px;
+    margin-left: 15px;
+    cursor: pointer;
   }
 </style>
