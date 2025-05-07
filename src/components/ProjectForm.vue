@@ -1,5 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { getAPIData } from '@/utils/utils';
+import { useAuthStore } from '../stores/auth';
+
+const API_PORT = location.port ? `:3333` : ''
+
+const authStore = useAuthStore();
+const user = ref(null);
 
 const id = ref('')
 const name = ref('')
@@ -11,9 +18,16 @@ const priority = ref('low')
 const description = ref('')
 const assignedTo = ref([])
 
+const usersAssigned = ref([]);
+const usersNotAssigned = ref([]);
+
 const showForm = ref(false)
 
 const emit = defineEmits(['create-project', 'update-project', 'delete-project'])
+
+onMounted( () => {
+  user.value = authStore.user;
+})
 
 /**
  * Handles the submission of the project form.
@@ -106,7 +120,25 @@ function selectProject(project) {
   description.value = project.description
   assignedTo.value = project.assignedTo
 
+  checkAssigned()
+
   showForm.value = true
+}
+
+async function checkAssigned() {
+  const allUsers = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/users`);
+  allUsers.forEach(u => {
+    if (assignedTo.value.includes(u._id)) {
+      usersAssigned.value.push(u);
+    } else {
+      usersNotAssigned.value.push(u);
+    }
+  })
+  if (assignedTo.value.length === 0) {
+    usersAssigned.value.push(user);
+    assignedTo.value.push(user.value._id);
+    usersNotAssigned.value = usersNotAssigned.value.filter(u => u._id !== user.value._id);
+  }
 }
 
 defineExpose({
