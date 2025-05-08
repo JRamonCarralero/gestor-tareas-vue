@@ -1,4 +1,5 @@
 <script setup>
+import TaskForm from '../components/TaskForm.vue';
 import { ref, onMounted } from 'vue';
 import { getAPIData } from '@/utils/utils';
 
@@ -37,7 +38,7 @@ function selectProject() {
   </div>
   <div class="view-container">
     <div class="view-form-container">
-      <!--<TaskForm />-->
+      <TaskForm />
     </div>
     <div class="view-list-container">
       <!--<TaskList />-->
