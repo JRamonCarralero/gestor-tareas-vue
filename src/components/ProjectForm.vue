@@ -256,38 +256,6 @@ defineExpose({
 </template>
 
 <style scoped>
-  .form-hidden {
-    display: none;
-  }
-
-  .btn-container {
-    display: flex;
-    justify-content: end;
-    margin-bottom: 1rem;
-  }
-
-  .btn-form {
-    width: 200px;
-    border: none;
-    border-radius: 15px;
-    color: white;
-    padding: 10px 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
-
-  .btn-show {
-    background-color: #4CAF50;
-  }
-
-  .btn-hide {
-    background-color: #ff0000;
-  }
-
   .form-assigned-list {
     width: 100%;
     padding: 10px 20px;
