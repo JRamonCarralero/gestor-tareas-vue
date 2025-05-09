@@ -1,9 +1,11 @@
 <script setup>
 import TaskForm from '../components/TaskForm.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, useTemplateRef } from 'vue';
 import { getAPIData } from '@/utils/utils';
 
 const API_PORT = location.port ? `:3333` : ''
+
+const taskForm = useTemplateRef('taskForm');
 
 const projects = ref([]);
 const projectInSelect = ref(null);
@@ -23,6 +25,37 @@ function selectProject() {
   selectedProject = projects.value.find(p => p._id === projectInSelect.value);
   console.log('selectedProject', selectedProject);
 }
+
+async function createTask(task) {
+  task.projectId = selectedProject._id;
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/tasks`, 'POST', JSON.stringify(task));
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
+  taskForm.value.showHideForm()
+  console.log(response)
+}
+
+async function updateTask(data) {
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/update/tasks/${data._id}`, 'PUT', JSON.stringify(data.task));
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
+  taskForm.value.showHideForm()
+  console.log(response)
+}
+
+async function deleteTask(data) {
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/delete/tasks/${data._id}`, 'DELETE');
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
+  taskForm.value.showHideForm()
+  console.log(response)
+}
 </script>
 
 <template>
@@ -38,7 +71,7 @@ function selectProject() {
   </div>
   <div class="view-container">
     <div class="view-form-container">
-      <TaskForm />
+      <TaskForm ref="taskForm" @create-task="createTask" @update-task="updateTask" @delete-task="deleteTask" />
     </div>
     <div class="view-list-container">
       <!--<TaskList />-->

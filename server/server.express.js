@@ -113,7 +113,7 @@ app.post('/create/projects',authorize('admin'), async (req, res) => {
   try {
     const data =  req.body
     data.createdBy = new ObjectId(data.createdBy)
-    data.assignedTo = [new ObjectId(data.createdBy)]
+    data.assignedTo = data.assignedTo.map(id => new ObjectId(id))
     const response = await db.create(data, 'projects')
     res.status(201).json({ message: 'OK', data: response });
   } catch (error) {
@@ -128,7 +128,9 @@ app.get('/read/projects', async (req, res) => {
 
 app.put('/update/projects/:id',authorize('admin'), async (req, res) => {
   try {
-    const response = await db.update(req.params.id, req.body, 'projects')
+    const data =  req.body
+    data.assignedTo = data.assignedTo.map(id => new ObjectId(id))
+    const response = await db.update(req.params.id, data, 'projects')
     res.status(200).json({ message: 'OK', data: response });
   } catch (error) {
     console.error('Error al actualizar el proyecto:', error);
@@ -146,7 +148,48 @@ app.delete('/delete/projects/:id',authorize('admin'), async (req, res) => {
   }
 })
 
+// Tasks //
 
+app.post('/create/tasks', authorize('admin'), async (req, res) => {
+  try {
+    const data =  req.body
+    data.assignedTo = new ObjectId(data.assignedTo)
+    const response = await db.create(data, 'tasks')
+    res.status(201).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al crear la tarea:', error);
+    res.status(500).json({ message: 'Error al crear la tarea.' });
+  }
+})
+
+app.get('/read/tasks', async (req, res) => {
+  res.json(await db.get({}, 'tasks'))
+})
+
+app.put('/update/tasks/:id', authorize('user'), async (req, res) => {
+  try {
+    const data =  req.body
+    data.assignedTo = new ObjectId(data.assignedTo)
+    const response = await db.update(req.params.id, data, 'tasks')
+    res.status(200).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al actualizar la tarea:', error);
+    res.status(500).json({ message: 'Error al actualizar la tarea.' });
+  }
+})
+
+app.delete('/delete/tasks/:id', authorize('admin'), async (req, res) => {
+  try {
+    const response = await db.delete(req.params.id, 'tasks')
+    res.status(200).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al eliminar la tarea:', error);
+    res.status(500).json({ message: 'Error al eliminar la tarea.' });
+  }
+})
+
+
+// Endpoints //
 
 app.listen(port, () => {
   console.log(`Project Tool listening on port ${port}`)

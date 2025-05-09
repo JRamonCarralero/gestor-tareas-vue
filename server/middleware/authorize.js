@@ -24,7 +24,11 @@ const authorize = (requiredRole) => {
             }
 
             // Ejemplo de verificación de roles
-            if (requiredRole && user.role !== requiredRole) {
+            if (requiredRole === 'admin' && user.role !== requiredRole) {
+                return res.status(403).json({ message: 'No tienes permiso para acceder a esta función.' });
+            }
+
+            if (requiredRole === 'user' && !user.role) {
                 return res.status(403).json({ message: 'No tienes permiso para acceder a esta función.' });
             }
 

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, emit } from 'vue'
 
 const id = ref('')
 const name = ref('')
@@ -15,14 +15,36 @@ const showForm = ref(false)
 
 function showHideForm() {
   showForm.value = !showForm.value
+  clearForm()
 }
 
-function submitTask() {
-  console.log('submit')
+function submitTask(e) {
+  e.preventDefault()
+  const task = {
+    name: name.value,
+    initialDate: initialDate.value,
+    finalDate: finalDate.value,
+    status: status.value,
+    priority: priority.value,
+    description: description.value,
+    assignedTo: assignedTo.value
+  }
+  if (id.value) {
+    const data = {
+      _id: id.value,
+      task
+    }
+    emit('update-task', data)
+  } else {
+    emit('create-task', task)
+  }
 }
 
 function deleteTask() {
-  console.log('delete')
+  const data = {
+    _id: id.value
+  }
+  emit('delete-task', data)
 }
 
 function clearForm() {
@@ -35,6 +57,10 @@ function clearForm() {
   description.value = ''
   assignedTo.value = ''
 }
+
+defineExpose({
+  showHideForm
+})
 </script>
 
 <template>
