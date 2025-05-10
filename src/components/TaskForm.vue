@@ -47,6 +47,19 @@ function deleteTask() {
   emit('delete-task', data)
 }
 
+function selectTask(task) {
+  id.value = task._id
+  name.value = task.name
+  initialDate.value = task.initialDate
+  finalDate.value = task.finalDate
+  status.value = task.status
+  priority.value = task.priority
+  description.value = task.description
+  assignedTo.value = task.assignedTo
+
+  showForm.value = true
+}
+
 function clearForm() {
   id.value = ''
   name.value = ''
@@ -59,7 +72,8 @@ function clearForm() {
 }
 
 defineExpose({
-  showHideForm
+  showHideForm,
+  selectTask
 })
 </script>
 

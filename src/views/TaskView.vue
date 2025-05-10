@@ -9,6 +9,7 @@ const taskForm = useTemplateRef('taskForm');
 
 const projects = ref([]);
 const projectInSelect = ref(null);
+const tasks = ref([]);
 let selectedProject = null;
 
 onMounted(async () => {
@@ -24,6 +25,24 @@ async function getProjects() {
 function selectProject() {
   selectedProject = projects.value.find(p => p._id === projectInSelect.value);
   console.log('selectedProject', selectedProject);
+  getTasks();
+}
+
+async function getTasks() {
+  if (!selectedProject) {
+    alert('Please select a project')
+    return
+  }
+  const filter = {
+    projectId: selectedProject._id
+  }
+  const payload = JSON.stringify(filter);
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/filter/tasks/:${selectedProject._id}`, 'POST', payload);
+  if (response.message !== 'OK') {
+    alert(response.message)
+    return
+  }
+  tasks.value = response.data
 }
 
 async function createTask(task) {
@@ -56,6 +75,10 @@ async function deleteTask(data) {
   taskForm.value.showHideForm()
   console.log(response)
 }
+
+function selectTask(task) {
+  taskForm.value.selectTask(task)
+}
 </script>
 
 <template>
@@ -74,7 +97,7 @@ async function deleteTask(data) {
       <TaskForm ref="taskForm" @create-task="createTask" @update-task="updateTask" @delete-task="deleteTask" />
     </div>
     <div class="view-list-container">
-      <!--<TaskList />-->
+      <TaskList :tasks="tasks" @select-task="(task) => selectTask(task)" />
     </div>
   </div>
 </template>

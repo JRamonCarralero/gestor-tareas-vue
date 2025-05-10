@@ -25,7 +25,6 @@ onMounted(async () => {
  */
 async function getProjects() {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects`);
-  console.log(response)
   return response
 }
 
