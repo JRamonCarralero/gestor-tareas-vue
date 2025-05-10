@@ -1,5 +1,5 @@
 <script setup>
-import { ref, emit } from 'vue'
+import { ref, watch } from 'vue'
 
 const id = ref('')
 const name = ref('')
@@ -12,6 +12,14 @@ const assignedTo = ref('')
 const usersInProject = ref([])
 
 const showForm = ref(false)
+
+const props = defineProps(['project'])
+
+const emit = defineEmits(['create-task', 'update-task', 'delete-task'])
+
+watch(props, () => {
+  usersInProject.value = props.project.assignedTo
+})
 
 function showHideForm() {
   showForm.value = !showForm.value
@@ -92,7 +100,7 @@ defineExpose({
       <div class="form-group">
         <label for="assignedTo">Asignado a:</label>
         <select id="assignedTo" name="assignedTo" v-model="assignedTo" required>
-          <option v-for="uip in usersInProject" :key="uip._id" :value="uip._id">{{ uip.name }}</option>
+          <option v-for="uip in usersInProject" :key="uip" :value="uip">{{ uip }}</option>
         </select>
       </div>
       <div class="form-group">

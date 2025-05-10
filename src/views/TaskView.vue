@@ -1,5 +1,6 @@
 <script setup>
 import TaskForm from '../components/TaskForm.vue';
+import TaskList from '../components/TaskList.vue';
 import { ref, onMounted, useTemplateRef } from 'vue';
 import { getAPIData } from '@/utils/utils';
 
@@ -37,7 +38,7 @@ async function getTasks() {
     projectId: selectedProject._id
   }
   const payload = JSON.stringify(filter);
-  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/filter/tasks/:${selectedProject._id}`, 'POST', payload);
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/filter/tasks`, 'POST', payload);
   if (response.message !== 'OK') {
     alert(response.message)
     return
@@ -94,7 +95,7 @@ function selectTask(task) {
   </div>
   <div class="view-container">
     <div class="view-form-container">
-      <TaskForm ref="taskForm" @create-task="createTask" @update-task="updateTask" @delete-task="deleteTask" />
+      <TaskForm ref="taskForm" :project="selectedProject" @create-task="createTask" @update-task="updateTask" @delete-task="deleteTask" />
     </div>
     <div class="view-list-container">
       <TaskList :tasks="tasks" @select-task="(task) => selectTask(task)" />

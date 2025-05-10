@@ -153,3 +153,41 @@
 .btn-hide {
   background-color: #ff0000;
 }
+
+/* Component list */
+
+.comp-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comp-element {
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+}
+
+.comp-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comp-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.comp-data {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  margin-bottom: 5px;
+}
