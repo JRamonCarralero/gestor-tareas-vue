@@ -8,7 +8,7 @@
         <div class="comp-info">
           <h3 class="comp-name" @click="$emit('select-task', task)">{{ task.name }}</h3>
           <div class="comp-data">
-            <span>Asignado a: {{ task.assignedTo }}</span>
+            <span>Asignado a: {{ task.userName }}</span>
             <span>Fecha de Inicio: {{ task.initialDate }}</span>
             <span>Fecha Final: {{ task.finalDate }}</span>
             <span>Estado: {{ task.status }}</span>

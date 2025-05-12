@@ -15,17 +15,15 @@ let selectedProject = null;
 
 onMounted(async () => {
   projects.value = await getProjects();
-  console.log('projects', projects.value);
 });
 
 async function getProjects() {
-  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects`);
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects/users`);
   return response;
 }
 
 function selectProject() {
   selectedProject = projects.value.find(p => p._id === projectInSelect.value);
-  console.log('selectedProject', selectedProject);
   getTasks();
 }
 
@@ -54,7 +52,7 @@ async function createTask(task) {
     return
   }
   taskForm.value.showHideForm()
-  console.log(response)
+  getTasks()
 }
 
 async function updateTask(data) {
@@ -64,7 +62,7 @@ async function updateTask(data) {
     return
   }
   taskForm.value.showHideForm()
-  console.log(response)
+  getTasks()
 }
 
 async function deleteTask(data) {
@@ -74,7 +72,7 @@ async function deleteTask(data) {
     return
   }
   taskForm.value.showHideForm()
-  console.log(response)
+  getTasks()
 }
 
 function selectTask(task) {
@@ -92,6 +90,12 @@ function selectTask(task) {
       <option v-for="project in projects" :key="project._id" :value="project._id">{{ project.name }}</option>
     </select>
     <button id="btn-filter" @click="selectProject()">Elegir</button>
+  </div>
+  <div v-if="selectedProject" class="info-container">
+    <h3>Proyecto: {{ selectedProject.name }}</h3>
+    <p>Fecha inicio: {{ selectedProject.initialDate }}</p>
+    <p>Fecha final: {{ selectedProject.finalDate }}</p>
+    <p>Descripción: {{ selectedProject.description }}</p>
   </div>
   <div class="view-container">
     <div class="view-form-container">

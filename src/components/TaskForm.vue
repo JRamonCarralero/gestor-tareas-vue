@@ -18,7 +18,7 @@ const props = defineProps(['project'])
 const emit = defineEmits(['create-task', 'update-task', 'delete-task'])
 
 watch(props, () => {
-  usersInProject.value = props.project.assignedTo
+  usersInProject.value = props.project.usersAssigned
 })
 
 function showHideForm() {
@@ -100,7 +100,7 @@ defineExpose({
       <div class="form-group">
         <label for="assignedTo">Asignado a:</label>
         <select id="assignedTo" name="assignedTo" v-model="assignedTo" required>
-          <option v-for="uip in usersInProject" :key="uip" :value="uip">{{ uip }}</option>
+          <option v-for="uip in usersInProject" :key="uip._id" :value="uip._id">{{ uip.name }}</option>
         </select>
       </div>
       <div class="form-group">

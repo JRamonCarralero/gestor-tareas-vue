@@ -13,7 +13,9 @@ export const db = {
     findOne: findOne,
     getFilter: getFilter,
     loginUser: loginUser,
-    deleteUserByUID: deleteUserByUID
+    deleteUserByUID: deleteUserByUID,
+    getProjectsWithUsers: getProjectsWithUsers,
+    getTasks: getTasks
 }
 
 /**
@@ -25,8 +27,8 @@ export const db = {
  */
 async function createItem(item, collection) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection(collection);
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection(collection);
     const returnValue = await itemsCollection.insertOne(item);
     console.log('db createItem', returnValue, item._id)
     return item
@@ -42,8 +44,8 @@ async function createItem(item, collection) {
  */
 async function getItems(filter, collection) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection(collection);
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection(collection);
     console.log('filter, ', filter)
     const response = await itemsCollection.find(filter).toArray()
     return response;
@@ -58,8 +60,8 @@ async function getItems(filter, collection) {
  */
   async function deleteItem(id, collection) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection(collection);
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection(collection);
     const returnValue = await itemsCollection.deleteOne({ _id: new ObjectId(id) });
     console.log('db deleteItem', returnValue, id)
     return id
@@ -74,8 +76,8 @@ async function getItems(filter, collection) {
  */
   async function deleteUserByUID(uid) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection('users');
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection('users');
     const returnValue = await itemsCollection.deleteOne({ firebaseUid: uid });
     console.log('db deleteUserByUID', returnValue, uid)
     return uid
@@ -91,8 +93,8 @@ async function getItems(filter, collection) {
  */
   async function updateItem(id, updates, collection) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection(collection);
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection(collection);
     const returnValue = await itemsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updates });
     console.log('db updateItem', returnValue, updates)
     return returnValue
@@ -116,8 +118,8 @@ async function getItems(filter, collection) {
 
   async function findOne(filter, collection) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection(collection);
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection(collection);
     const response = await itemsCollection.findOne(filter)
     return response;
   }
@@ -131,8 +133,8 @@ async function getItems(filter, collection) {
  */
   async function loginUser({email, password}) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const usersCollection = comercioDB.collection('user');
+    const projectDB = client.db(database);
+    const usersCollection = projectDB.collection('user');
     return await usersCollection.findOne({ email, password })
   }
 
@@ -146,8 +148,63 @@ async function getItems(filter, collection) {
  */
   async function getFilter(filter, collection) {
     const client = new MongoClient(URI);
-    const comercioDB = client.db(database);
-    const itemsCollection = comercioDB.collection(collection);
+    const projectDB = client.db(database);
+    const itemsCollection = projectDB.collection(collection);
     const response = await itemsCollection.find(filter).toArray()
     return response;
   }
+
+/**
+ * Finds all projects in the 'projects' collection in the 'comercio' database, and
+ * includes all users assigned to each project.
+ *
+ * @returns {Promise<Array<object>>} The found projects array, or empty array if no projects match the filter.
+ */
+async function getProjectsWithUsers() {
+  const client = new MongoClient(URI);
+  const projectDB = client.db(database);
+  const projectsCollection = projectDB.collection('projects');
+
+  const pipeline = [];
+  pipeline.push({
+    $lookup: {
+      from: 'users',
+      localField: 'assignedTo',
+      foreignField: '_id',
+      as: 'usersAssigned'
+    }
+  });
+
+  const response = await projectsCollection.aggregate(pipeline).toArray();
+  return response;
+}
+
+async function getTasks(filter) {
+  const client = new MongoClient(URI);
+  const projectDB = client.db(database);
+  const tasksCollection = projectDB.collection('tasks');
+
+  const pipeline = [];
+  pipeline.push({
+    $match: filter
+  })
+  pipeline.push({
+    $lookup: {
+      from: 'users',
+      localField: 'assignedTo',
+      foreignField: '_id',
+      as: 'userAssigned'
+    }
+  });
+  pipeline.push({
+    $set: {
+      userName: { $first: '$userAssigned.name' }
+    }
+  });
+  pipeline.push({
+    $unset: "userAssigned"
+  });
+
+  const response = await tasksCollection.aggregate(pipeline).toArray();
+  return response;
+}

@@ -161,12 +161,17 @@ app.post('/filter/projects', async (req, res) => {
   }
 })
 
+app.get('/read/projects/users', async (req, res) => {
+  res.json(await db.getProjectsWithUsers({}, 'projects'))
+})
+
 // Tasks //
 
 app.post('/create/tasks', authorize('admin'), async (req, res) => {
   try {
     const data =  req.body
     data.assignedTo = new ObjectId(data.assignedTo)
+    data.projectId = new ObjectId(data.projectId)
     const response = await db.create(data, 'tasks')
     res.status(201).json({ message: 'OK', data: response });
   } catch (error) {
@@ -205,7 +210,8 @@ app.post('/filter/tasks', async (req, res) => {
   try {
     const data = req.body
     if (data.projectId) data.projectId = new ObjectId(data.projectId)
-    const response = await db.getFilter(data, 'tasks')
+    console.log(data)
+    const response = await db.getTasks(data)
     res.status(200).json({ message: 'OK', data: response });
   } catch (error) {
     console.error('Error al filtrar las tareas:', error);
