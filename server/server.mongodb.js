@@ -179,6 +179,14 @@ async function getProjectsWithUsers() {
   return response;
 }
 
+/**
+ * Finds all tasks in the 'tasks' collection in the 'comercio' database
+ * that match the given filter.
+ *
+ * @param {object} filter - The filter to apply to find the tasks.
+ * @returns {Promise<Array<object>>} The found tasks array, or empty array if no tasks match the filter.
+ * Each task object contains a userName field that contains the name of the user assigned to it.
+ */
 async function getTasks(filter) {
   const client = new MongoClient(URI);
   const projectDB = client.db(database);

@@ -17,16 +17,31 @@ onMounted(async () => {
   projects.value = await getProjects();
 });
 
+/**
+ * Gets all projects from the server, including the associated users.
+ * @returns {Promise<Object[]>} an array of project objects, each containing the project data and the associated users
+ */
 async function getProjects() {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects/users`);
   return response;
 }
 
+/**
+ * Selects a project based on the selected project ID from the dropdown.
+ * Sets the selected project as the active project and fetches the tasks
+ * associated with the selected project.
+ */
 function selectProject() {
   selectedProject = projects.value.find(p => p._id === projectInSelect.value);
   getTasks();
 }
 
+/**
+ * Gets all tasks for the currently selected project.
+ * If no project is selected, alerts the user and returns.
+ * If the response is not OK, alerts the user with the response message.
+ * Otherwise, sets the tasks reactive reference to the response data.
+ */
 async function getTasks() {
   if (!selectedProject) {
     alert('Please select a project')
@@ -44,6 +59,13 @@ async function getTasks() {
   tasks.value = response.data
 }
 
+/**
+ * Creates a new task in the server for the selected project.
+ * If the response is not OK, shows an alert with the response message.
+ * If the response is OK, clears the form and updates the tasks list.
+ * @param {Object} task - The task data to create, including its project ID.
+ * @returns {Promise<void>}
+ */
 async function createTask(task) {
   task.projectId = selectedProject._id;
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/tasks`, 'POST', JSON.stringify(task));
@@ -55,6 +77,13 @@ async function createTask(task) {
   getTasks()
 }
 
+/**
+ * Updates a task in the server.
+ * If the response is not OK, shows an alert with the response message.
+ * If the response is OK, clears the form and updates the tasks list.
+ * @param {Object} data - an object containing the task id to update and the task data to update
+ * @returns {Promise<void>}
+ */
 async function updateTask(data) {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/update/tasks/${data._id}`, 'PUT', JSON.stringify(data.task));
   if (response.message !== 'OK') {
@@ -65,6 +94,13 @@ async function updateTask(data) {
   getTasks()
 }
 
+  /**
+   * Deletes a task from the server.
+   * If the response is not OK, shows an alert with the response message.
+   * If the response is OK, clears the form and updates the tasks list.
+   * @param {Object} data - an object containing the task id to delete
+   * @returns {Promise<void>}
+   */
 async function deleteTask(data) {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/delete/tasks/${data._id}`, 'DELETE');
   if (response.message !== 'OK') {
@@ -75,6 +111,10 @@ async function deleteTask(data) {
   getTasks()
 }
 
+/**
+ * Populates the task form with the selected task data.
+ * @param {Object} task - the task object to populate the form with
+ */
 function selectTask(task) {
   taskForm.value.selectTask(task)
 }
