@@ -31,6 +31,7 @@ watch(() => authStore.user, () => {
         <nav class="navbar">
             <ul>
                 <li v-if="!user"><RouterLink to="/">Login</RouterLink></li>
+                <li v-if="user"><RouterLink to="/dashboard">Dashboard</RouterLink></li>
                 <li v-if="user &&user.role === 'admin'"><RouterLink to="/users">Usuarios</RouterLink></li>
                 <li v-if="user"><RouterLink to="/tasks">Tareas</RouterLink></li>
                 <li v-if="user"><RouterLink to="/projects">Proyectos</RouterLink></li>

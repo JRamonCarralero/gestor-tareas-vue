@@ -148,6 +148,19 @@ app.delete('/delete/projects/:id',authorize('admin'), async (req, res) => {
   }
 })
 
+app.post('/filter/projects', async (req, res) => {
+  try {
+    const data =  req.body
+    if (data.assignedTo) data.assignedTo = new ObjectId(data.assignedTo)
+    console.log('data', data)
+    const  response = await db.getFilter(data, 'projects')
+    res.status(200).json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al filtrar los proyectos:', error);
+    res.status(500).json({ message: 'Error al filtrar los proyectos.' });
+  }
+})
+
 // Tasks //
 
 app.post('/create/tasks', authorize('admin'), async (req, res) => {
@@ -191,7 +204,7 @@ app.delete('/delete/tasks/:id', authorize('admin'), async (req, res) => {
 app.post('/filter/tasks', async (req, res) => {
   try {
     const data = req.body
-    data.projectId = new ObjectId(data.projectId)
+    if (data.projectId) data.projectId = new ObjectId(data.projectId)
     const response = await db.getFilter(data, 'tasks')
     res.status(200).json({ message: 'OK', data: response });
   } catch (error) {
