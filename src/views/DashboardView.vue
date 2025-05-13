@@ -16,8 +16,7 @@ onMounted(async () => {
 })
 
 async function getProjects() {
-  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/filter/projects`, 'POST', JSON.stringify({ assignedTo: user.value._id }));
-  console.log(response)
+  const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects/tasks`, 'POST', JSON.stringify({ assignedTo: user.value._id }));
   if (response.message !== 'OK') {
     alert(response.message)
     return
@@ -31,6 +30,11 @@ async function getProjects() {
   <ul>
     <li v-for="project in projects" :key="project._id">
       {{ project.name }}
+      <ul>
+        <li v-for="task in project.tasks" :key="task._id">
+          {{ task.name }}
+        </li>
+      </ul>
     </li>
   </ul>
 </template>

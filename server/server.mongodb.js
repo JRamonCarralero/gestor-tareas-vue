@@ -15,7 +15,8 @@ export const db = {
     loginUser: loginUser,
     deleteUserByUID: deleteUserByUID,
     getProjectsWithUsers: getProjectsWithUsers,
-    getTasks: getTasks
+    getTasks: getTasks,
+    getProjectsWithTasks: getProjectsWithTasks
 }
 
 /**
@@ -214,5 +215,38 @@ async function getTasks(filter) {
   });
 
   const response = await tasksCollection.aggregate(pipeline).toArray();
+  return response;
+}
+
+async function getProjectsWithTasks(userId) {
+  const client = new MongoClient(URI);
+  const projectDB = client.db(database);
+  const projectsCollection = projectDB.collection('projects');
+
+  const pipeline = [];
+  pipeline.push({
+    $match: { assignedTo: userId }
+  })
+  pipeline.push({
+    $lookup: {
+      from: 'tasks',
+      let: { projectId: '$_id' },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: ['$projectId', '$$projectId'] },
+                { $eq: [userId, '$assignedTo'] }
+              ]
+            }
+          }
+        }
+      ],
+      as: 'tasks'
+    }
+  });
+
+  const response = await projectsCollection.aggregate(pipeline).toArray();
   return response;
 }

@@ -165,6 +165,17 @@ app.get('/read/projects/users', async (req, res) => {
   res.json(await db.getProjectsWithUsers({}, 'projects'))
 })
 
+app.post('/read/projects/tasks', async (req, res) => {
+  try {
+    const userId = new ObjectId(req.body.assignedTo)
+    const response = await db.getProjectsWithTasks(userId)
+    res.json({ message: 'OK', data: response });
+  } catch (error) {
+    console.error('Error al filtrar los proyectos:', error);
+    res.status(500).json({ message: 'Error al filtrar los proyectos.' });
+  }
+})
+
 // Tasks //
 
 app.post('/create/tasks', authorize('admin'), async (req, res) => {
