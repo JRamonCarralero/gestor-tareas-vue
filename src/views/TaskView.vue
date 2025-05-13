@@ -61,12 +61,17 @@ async function getTasks() {
 
 /**
  * Creates a new task in the server for the selected project.
+ * If checking dates fails, shows an alert.
  * If the response is not OK, shows an alert with the response message.
  * If the response is OK, clears the form and updates the tasks list.
  * @param {Object} task - The task data to create, including its project ID.
  * @returns {Promise<void>}
  */
 async function createTask(task) {
+  if (!checkTaskDates(task.initialDate, task.finalDate)) {
+    alert('Las fechas de la tarea deben estar en el rango de fechas del proyecto')
+    return
+  }
   task.projectId = selectedProject._id;
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/tasks`, 'POST', JSON.stringify(task));
   if (response.message !== 'OK') {
@@ -79,12 +84,17 @@ async function createTask(task) {
 
 /**
  * Updates a task in the server.
+ * If checking dates fails, shows an alert.
  * If the response is not OK, shows an alert with the response message.
  * If the response is OK, clears the form and updates the tasks list.
  * @param {Object} data - an object containing the task id to update and the task data to update
  * @returns {Promise<void>}
  */
 async function updateTask(data) {
+  if (!checkTaskDates(data.task.initialDate, data.task.finalDate)) {
+    alert('Las fechas de la tarea deben estar en el rango de fechas del proyecto')
+    return
+  }
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/update/tasks/${data._id}`, 'PUT', JSON.stringify(data.task));
   if (response.message !== 'OK') {
     alert(response.message)
@@ -94,13 +104,13 @@ async function updateTask(data) {
   getTasks()
 }
 
-  /**
-   * Deletes a task from the server.
-   * If the response is not OK, shows an alert with the response message.
-   * If the response is OK, clears the form and updates the tasks list.
-   * @param {Object} data - an object containing the task id to delete
-   * @returns {Promise<void>}
-   */
+/**
+ * Deletes a task from the server.
+ * If the response is not OK, shows an alert with the response message.
+ * If the response is OK, clears the form and updates the tasks list.
+ * @param {Object} data - an object containing the task id to delete
+ * @returns {Promise<void>}
+ */
 async function deleteTask(data) {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/delete/tasks/${data._id}`, 'DELETE');
   if (response.message !== 'OK') {
@@ -117,6 +127,22 @@ async function deleteTask(data) {
  */
 function selectTask(task) {
   taskForm.value.selectTask(task)
+}
+
+/**
+ * Checks if the given initial and final dates for a task are within the dates of the selected project.
+ * @param {string} initialDate - the initial date of the task
+ * @param {string} finalDate - the final date of the task
+ * @returns {boolean} true if the dates are within the project dates, false if not.
+ */
+function checkTaskDates(initialDate, finalDate) {
+  console.log('initialDate', initialDate, 'finalDate', finalDate)
+  console.log('selectProject.value', selectedProject)
+  if (initialDate < selectedProject.initialDate || finalDate > selectedProject.finalDate) {
+    return false
+  } else {
+    return true
+  }
 }
 </script>
 

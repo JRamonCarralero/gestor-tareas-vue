@@ -42,6 +42,12 @@ function showHideForm() {
  */
 function submitTask(e) {
   e.preventDefault()
+
+  if (initialDate.value >= finalDate.value) {
+    alert('La fecha inicial debe ser menor a la fecha final')
+    return
+  }
+
   const task = {
     name: name.value,
     initialDate: initialDate.value,
