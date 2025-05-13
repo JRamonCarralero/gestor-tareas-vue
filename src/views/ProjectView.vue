@@ -38,10 +38,6 @@ async function getProjects() {
  */
 async function createProject(project) {
   project.createdBy = user.value._id
-  if (project.initialDate >= project.finalDate) {
-    alert('La fecha inicial debe ser menor a la fecha final')
-    return
-  }
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/projects`, 'POST', JSON.stringify(project));
   if (response.message !== 'OK') {
     alert(response.message)

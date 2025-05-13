@@ -39,6 +39,11 @@ const emit = defineEmits(['create-project', 'update-project', 'delete-project'])
  */
 function submitProject(e) {
   e.preventDefault()
+  if (initialDate.value >= finalDate.value) {
+    alert('La fecha inicial debe ser menor a la fecha final')
+    return
+  }
+
   const project = {
     name: name.value,
     client: client.value,
