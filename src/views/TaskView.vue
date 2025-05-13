@@ -151,16 +151,20 @@ function checkTaskDates(initialDate, finalDate) {
     <h2 class="view-title">Tareas</h2>
   </div>
   <div class="view-filter-container">
-    <label for="select-project">Proyectos:</label>
+    <label for="select-project">Seleccione un proyecto:</label>
     <select id="select-project" v-model="projectInSelect">
       <option v-for="project in projects" :key="project._id" :value="project._id">{{ project.name }}</option>
     </select>
-    <button id="btn-filter" @click="selectProject()">Elegir</button>
+    <button id="btn-filter" class="btn-filter" @click="selectProject()">Elegir</button>
   </div>
-  <div v-if="selectedProject" class="info-container">
+  <div v-if="selectedProject" class="view-container">
     <h3>Proyecto: {{ selectedProject.name }}</h3>
-    <p>Fecha inicio: {{ selectedProject.initialDate }}</p>
-    <p>Fecha final: {{ selectedProject.finalDate }}</p>
+    <div class="info-items">
+      <span>Fecha inicio: {{ selectedProject.initialDate }}</span>
+      <span>Fecha final: {{ selectedProject.finalDate }}</span>
+      <span>Estado: {{ selectedProject.status }}</span>
+      <span>Prioridad: {{ selectedProject.priority }}</span>
+    </div>
     <p>Descripción: {{ selectedProject.description }}</p>
   </div>
   <div class="view-container">
@@ -172,3 +176,41 @@ function checkTaskDates(initialDate, finalDate) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.view-filter-container {
+  width: 650px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.btn-filter {
+  width: 200px;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: #008CBA;
+  color: white;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.info-items {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  margin: 20px auto 10px;
+}
+</style>
