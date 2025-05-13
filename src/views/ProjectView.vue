@@ -30,6 +30,7 @@ async function getProjects() {
 
 /**
  * Creates a new project in the server adding the current user as the creator.
+ * If the initial date is greater than or equal to the final date, shows an alert.
  * If the response is not OK, shows an alert with the response message.
  * If the response is OK, clears the form and updates the projects list.
  * @param {Object} project - The project data to create
@@ -37,6 +38,10 @@ async function getProjects() {
  */
 async function createProject(project) {
   project.createdBy = user.value._id
+  if (project.initialDate >= project.finalDate) {
+    alert('La fecha inicial debe ser menor a la fecha final')
+    return
+  }
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/create/projects`, 'POST', JSON.stringify(project));
   if (response.message !== 'OK') {
     alert(response.message)
