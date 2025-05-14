@@ -25,8 +25,8 @@ const showMore = ref(false)
         <p>{{ props.project.description }}</p>
       </div>
     </div>
-    <ul>
-      <li v-for="task in props.project.tasks" :key="task._id">
+    <ul class="project-tasks-list">
+      <li class="project-task-item" v-for="task in props.project.tasks" :key="task._id">
         <DashboardTask :task="task" />
       </li>
     </ul>
@@ -40,7 +40,7 @@ const showMore = ref(false)
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff
+  background-color: #f0f0f0
 }
 
 .project-title {
@@ -72,5 +72,15 @@ const showMore = ref(false)
 
 .project-description {
   width: 100%;
+}
+
+.project-tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-task-item + .project-task-item {
+  margin-top: 15px;
 }
 </style>

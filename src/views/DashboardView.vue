@@ -51,9 +51,5 @@ async function getProjects() {
 .dashboard-list-item {
   width: 100%;
   padding: 1rem;
-
-  & + .dashboard-list-item {
-    border-top: 1px solid #ccc;
-  }
 }
 </style>
