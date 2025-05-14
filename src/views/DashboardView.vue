@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { getAPIData } from '../utils/utils';
+import DashboardProject from '@/components/dashboardProject.vue';
 
 const API_PORT = location.port ? `:3333` : ''
 
@@ -29,12 +30,7 @@ async function getProjects() {
   <h2>Dashboard</h2>
   <ul>
     <li v-for="project in projects" :key="project._id">
-      {{ project.name }}
-      <ul>
-        <li v-for="task in project.tasks" :key="task._id">
-          {{ task.name }}
-        </li>
-      </ul>
+      <DashboardProject :project="project" />
     </li>
   </ul>
 </template>
