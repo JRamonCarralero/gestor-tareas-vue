@@ -27,10 +27,33 @@ async function getProjects() {
 </script>
 
 <template>
-  <h2>Dashboard</h2>
-  <ul>
-    <li v-for="project in projects" :key="project._id">
-      <DashboardProject :project="project" />
-    </li>
-  </ul>
+  <div class="view-title-container">
+    <h2 class="view-title">Dashboard</h2>
+  </div>
+  <div class="view-container">
+    <ul class="dashboard-list">
+      <li class="dashboard-list-item" v-for="project in projects" :key="project._id">
+        <DashboardProject :project="project" />
+      </li>
+    </ul>
+  </div>
 </template>
+
+<style scoped>
+.dashboard-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+}
+
+.dashboard-list-item {
+  width: 100%;
+  padding: 1rem;
+
+  & + .dashboard-list-item {
+    border-top: 1px solid #ccc;
+  }
+}
+</style>
