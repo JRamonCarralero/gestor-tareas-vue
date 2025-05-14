@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import DashboardTask from './dashboardTask.vue'
+import DashboardTask from './DashboardTask.vue'
 
 const props = defineProps(['project'])
 

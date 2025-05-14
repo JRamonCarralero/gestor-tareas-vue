@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { getAPIData } from '../utils/utils';
-import DashboardProject from '@/components/dashboardProject.vue';
+import DashboardProject from '@/components/DashboardProject.vue';
 
 const API_PORT = location.port ? `:3333` : ''
 
