@@ -42,9 +42,9 @@ Gestion de tareas:
 
 * Selector de proyectos para filtrar las tareas.
 * Listado de todas las tareas de ese proyecto.
-![captura de pantalla](./public/tarea-list.png)
+![captura de pantalla](./public/tareas-list.png)
 * Formulario para la creación, edición y borrado de tareas. Sólo se pueden crear tareas en proyectos existentes y habiendo un proyecto elegido
-![captura de pantalla](./public/tarea-form.png)
+![captura de pantalla](./public/tareas-form.png)
 
 ## Tecnologías usadas
 
