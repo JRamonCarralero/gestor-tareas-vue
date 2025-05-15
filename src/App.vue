@@ -33,8 +33,8 @@ watch(() => authStore.user, () => {
                 <li v-if="!user"><RouterLink to="/">Login</RouterLink></li>
                 <li v-if="user"><RouterLink to="/dashboard">Dashboard</RouterLink></li>
                 <li v-if="user &&user.role === 'admin'"><RouterLink to="/users">Usuarios</RouterLink></li>
-                <li v-if="user"><RouterLink to="/tasks">Tareas</RouterLink></li>
-                <li v-if="user"><RouterLink to="/projects">Proyectos</RouterLink></li>
+                <li v-if="user &&user.role === 'admin'"><RouterLink to="/tasks">Tareas</RouterLink></li>
+                <li v-if="user &&user.role === 'admin'"><RouterLink to="/projects">Proyectos</RouterLink></li>
                 <li v-if="user"><button id="logout-btn" class="logout-btn" @click="logout">Logout</button></li>
             </ul>
         </nav>

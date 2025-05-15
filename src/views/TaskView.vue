@@ -157,22 +157,22 @@ function checkTaskDates(initialDate, finalDate) {
     </select>
     <button id="btn-filter" class="btn-filter" @click="selectProject()">Elegir</button>
   </div>
-  <div v-if="selectedProject" class="view-container">
+  <div v-if="selectedProject" class="view-container border-bottom">
     <h3>Proyecto: {{ selectedProject.name }}</h3>
     <div class="info-items">
-      <span>Fecha inicio: {{ selectedProject.initialDate }}</span>
-      <span>Fecha final: {{ selectedProject.finalDate }}</span>
-      <span>Estado: {{ selectedProject.status }}</span>
-      <span>Prioridad: {{ selectedProject.priority }}</span>
+      <span><b>Fecha inicio:</b> {{ selectedProject.initialDate }}</span>
+      <span><b>Fecha final:</b> {{ selectedProject.finalDate }}</span>
+      <span><b>Estado:</b> {{ selectedProject.status }}</span>
+      <span><b>Prioridad:</b> {{ selectedProject.priority }}</span>
     </div>
-    <p>Descripción: {{ selectedProject.description }}</p>
+    <p>{{ selectedProject.description }}</p>
   </div>
   <div class="view-container">
-    <div class="view-form-container">
-      <TaskForm ref="taskForm" :project="selectedProject" @create-task="createTask" @update-task="updateTask" @delete-task="deleteTask" />
-    </div>
     <div class="view-list-container">
       <TaskList :tasks="tasks" @select-task="(task) => selectTask(task)" />
+    </div>
+    <div v-if="selectedProject" class="view-form-container">
+      <TaskForm ref="taskForm" :project="selectedProject" @create-task="createTask" @update-task="updateTask" @delete-task="deleteTask" />
     </div>
   </div>
 </template>

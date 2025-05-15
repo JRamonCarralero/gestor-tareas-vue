@@ -115,7 +115,7 @@ function clearUser() {
     <h2 class="view-title">Usuarios</h2>
   </div>
   <div class="view-container">
-    <div id="user-form-container" class="view-form-container">
+    <div id="user-form-container" class="view-form-container border-bottom">
       <UserForm ref="usersForm" :selected-user="selectedUser"
         @create-user="(user) => createUser(user)"
         @update-user="(data) => updateUser(data)"

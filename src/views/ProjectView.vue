@@ -105,11 +105,11 @@ async function deleteProject(data) {
     <h2 class="view-title">Proyectos</h2>
   </div>
   <div class="view-container">
-    <div id="project-form-container" class="view-form-container">
-      <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" @delete-project="deleteProject" />
-    </div>
     <div id="projects-list-container" class="view-table-container">
       <ProjectList :projects="projects" @select-project="(project) => selectProject(project)" />
+    </div>
+    <div id="project-form-container" class="view-form-container">
+      <ProjectForm ref="projectForm" @create-project="createProject" @update-project="updateProject" @delete-project="deleteProject" />
     </div>
   </div>
 </template>

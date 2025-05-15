@@ -12,7 +12,8 @@ const error = ref('');
 const router = useRouter();
 const authStore = useAuthStore();
 
-const login = async () => {
+const login = async (e) => {
+  e.preventDefault();
   error.value = '';
   try {
     // Iniciar sesión en Firebase con email y contraseña y obtenemos los credenciales
@@ -33,7 +34,7 @@ const login = async () => {
       const userData = await response.json();
       authStore.setUser(userData); // Guarda la información del usuario en Pinia
       sessionStorage.setItem('isAuthenticated', 'true'); // Guarda un indicador de sesión
-      router.push('/projects'); // Redirige a la página principal
+      router.push('/dashboard'); // Redirige a la página principal
     } else if (response.status === 401) {
       error.value = 'Credenciales inválidas.';
     } else {
@@ -55,14 +56,14 @@ export default {
 </script>
 
 <template>
-  <div class="login-container">
+  <form class="login-container">
     <label for="email" class="l-label">Email:</label>
     <input type="email" id="email" name="email" class="l-input" v-model="email" placeholder="Email">
     <label for="password" class="l-label">Contraseña:</label>
     <input type="password" id="password" name="password" class="l-input" v-model="password" placeholder="Contraseña">
-    <button @click="login" class="l-btn">Login</button>
+    <button type="submit" @click="login" class="l-btn">Login</button>
     <p v-if="error">{{ error }}</p>
-  </div>
+  </form>
 </template>
 
 <style scoped>

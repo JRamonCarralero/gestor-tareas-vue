@@ -8,11 +8,11 @@
         <div class="comp-info">
           <h3 class="comp-name" @click="$emit('select-task', task)">{{ task.name }}</h3>
           <div class="comp-data">
-            <span>Asignado a: {{ task.userName }}</span>
-            <span>Fecha de Inicio: {{ task.initialDate }}</span>
-            <span>Fecha Final: {{ task.finalDate }}</span>
-            <span>Estado: {{ task.status }}</span>
-            <span>Prioridad: {{ task.priority }}</span>
+            <span><b>Asignado a:</b> {{ task.userName }}</span>
+            <span><b>Fecha de Inicio:</b> {{ task.initialDate }}</span>
+            <span><b>Fecha Final:</b> {{ task.finalDate }}</span>
+            <span><b>Estado:</b> {{ task.status }}</span>
+            <span><b>Prioridad:</b> {{ task.priority }}</span>
           </div>
           <div class="comp-description">
             <p>{{ task.description }}</p>
