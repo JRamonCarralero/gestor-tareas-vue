@@ -7,6 +7,12 @@ const emit = defineEmits(['update-task'])
 
 const showMore = ref(false)
 
+/**
+ * Prepares and emits an 'update-task' event with the provided task data.
+ * Adds the current project's ID to the task data before emitting.
+ *
+ * @param {Object} data - The task data to update, which will be augmented with the project ID.
+ */
 function updateTask(data) {
   data.projectId = props.project._id
   emit('update-task', data)

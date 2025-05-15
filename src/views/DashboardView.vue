@@ -16,6 +16,12 @@ onMounted(async () => {
   await getProjects()
 })
 
+/**
+ * Fetches projects along with their tasks assigned to the current user from the server.
+ * If the response is not OK, alerts the user with the response message.
+ * If the response is OK, updates the local projects reactive reference with the response data.
+ * @returns {Promise<void>}
+ */
 async function getProjects() {
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/read/projects/tasks`, 'POST', JSON.stringify({ assignedTo: user.value._id }));
   if (response.message !== 'OK') {
@@ -25,6 +31,13 @@ async function getProjects() {
   projects.value = response.data
 }
 
+/**
+ * Updates the status of a specific task within a project in the local projects data.
+ * Finds the project with the given project ID and updates the task with the given task ID.
+ * Sets the task's status to the new status provided in the data object.
+ *
+ * @param {Object} data - an object containing the projectId, taskId, and new status
+ */
 function updateTask(data) {
   projects.value = projects.value.map(project => {
     if (project._id === data.projectId) {

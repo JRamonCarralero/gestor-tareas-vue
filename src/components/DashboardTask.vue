@@ -9,6 +9,14 @@ const emit = defineEmits(['update-task'])
 
 const showMore = ref(false)
 
+/**
+ * Updates the status of a task on the server.
+ * Sends a PUT request with the new status to the server.
+ * If the server response is not 'OK', an alert with the response message is shown.
+ * Emits an 'update-task' event with the task ID and new status if the update is successful.
+ *
+ * @param {string} status - The new status to update the task with.
+ */
 async function updateTask(status) {
   const data = { status: status }
   const response = await getAPIData(`${location.protocol}//${location.hostname}${API_PORT}/update/tasks/${props.task._id}`, 'PUT', JSON.stringify(data));
