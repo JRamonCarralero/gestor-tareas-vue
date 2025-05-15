@@ -27,7 +27,7 @@ watch(() => authStore.user, () => {
 
 <template>
   <header class="main-header">
-    <h1>Project Tool</h1>
+    <h1>Gestor de Proyectos</h1>
         <nav class="navbar">
             <ul>
                 <li v-if="!user"><RouterLink to="/">Login</RouterLink></li>

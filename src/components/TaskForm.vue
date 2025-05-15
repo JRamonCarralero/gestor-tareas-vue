@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const id = ref('')
 const name = ref('')
@@ -16,6 +16,10 @@ const showForm = ref(false)
 const props = defineProps(['project'])
 
 const emit = defineEmits(['create-task', 'update-task', 'delete-task'])
+
+onMounted(() => {
+  usersInProject.value = props.project.usersAssigned
+})
 
 watch(props, () => {
   usersInProject.value = props.project.usersAssigned

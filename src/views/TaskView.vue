@@ -136,8 +136,6 @@ function selectTask(task) {
  * @returns {boolean} true if the dates are within the project dates, false if not.
  */
 function checkTaskDates(initialDate, finalDate) {
-  console.log('initialDate', initialDate, 'finalDate', finalDate)
-  console.log('selectProject.value', selectedProject)
   if (initialDate < selectedProject.initialDate || finalDate > selectedProject.finalDate) {
     return false
   } else {
