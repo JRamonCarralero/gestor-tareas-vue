@@ -198,7 +198,7 @@ app.get('/read/tasks', async (req, res) => {
 app.put('/update/tasks/:id', authorize('user'), async (req, res) => {
   try {
     const data =  req.body
-    data.assignedTo = new ObjectId(data.assignedTo)
+    if (data.assignedTo) data.assignedTo = new ObjectId(data.assignedTo)
     const response = await db.update(req.params.id, data, 'tasks')
     res.status(200).json({ message: 'OK', data: response });
   } catch (error) {

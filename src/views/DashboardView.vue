@@ -24,6 +24,20 @@ async function getProjects() {
   }
   projects.value = response.data
 }
+
+function updateTask(data) {
+  projects.value = projects.value.map(project => {
+    if (project._id === data.projectId) {
+      project.tasks = project.tasks.map(task => {
+        if (task._id === data.taskId) {
+          task.status = data.status
+        }
+        return task
+      })
+    }
+    return project
+  })
+}
 </script>
 
 <template>
@@ -33,7 +47,7 @@ async function getProjects() {
   <div class="view-container">
     <ul class="dashboard-list">
       <li class="dashboard-list-item" v-for="project in projects" :key="project._id">
-        <DashboardProject :project="project" />
+        <DashboardProject :project="project" @update-task="updateTask" />
       </li>
     </ul>
   </div>

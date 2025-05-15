@@ -1,10 +1,16 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import DashboardTask from './DashboardTask.vue'
 
 const props = defineProps(['project'])
+const emit = defineEmits(['update-task'])
 
 const showMore = ref(false)
+
+function updateTask(data) {
+  data.projectId = props.project._id
+  emit('update-task', data)
+}
 </script>
 
 <template>
@@ -27,7 +33,7 @@ const showMore = ref(false)
     </div>
     <ul class="project-tasks-list">
       <li class="project-task-item" v-for="task in props.project.tasks" :key="task._id">
-        <DashboardTask :task="task" />
+        <DashboardTask :task="task" @update-task="updateTask" />
       </li>
     </ul>
   </div>
